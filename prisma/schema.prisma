@@ -11,7 +11,11 @@ datasource db {
 }
 
 model Access {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userAgent String   @map("user_agent") @db.String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamp
+  User      User[]
 }
 
 model User {
@@ -28,4 +32,6 @@ model User {
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamp
   deletedAt DateTime? @map("deleted_at") @db.Timestamp
+  Access    Access?   @relation(fields: [accessId], references: [id])
+  accessId  String?   @map("access_id") @db.ObjectId
 }
