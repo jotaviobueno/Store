@@ -1,7 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UserSchema } from 'src/domain/schemas';
-import { CreateUserInput, UpdateUserInput } from 'src/domain/dtos';
+import {
+  CreateUserInput,
+  IdInput,
+  PaginationOptionsInput,
+  UpdateUserInput,
+} from 'src/domain/dtos';
 
 @Resolver(() => UserSchema)
 export class UserResolver {
@@ -12,23 +17,28 @@ export class UserResolver {
     return this.userService.create(createUserInput);
   }
 
-  @Query(() => [UserSchema], { name: 'user' })
-  findAll() {
-    return this.userService.findAll();
+  @Query(() => [UserSchema], { name: 'users' })
+  findAll(
+    @Args('paginationOptions') paginationOptions: PaginationOptionsInput,
+  ) {
+    return this.userService.findAll(paginationOptions);
   }
 
   @Query(() => UserSchema, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('userId') { id }: IdInput) {
     return this.userService.findOne(id);
   }
 
   @Mutation(() => UserSchema)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.userService.update(updateUserInput.id, updateUserInput);
+  updateUser(
+    @Args('userId') { id }: IdInput,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return this.userService.update(id, updateUserInput);
   }
 
-  @Mutation(() => UserSchema)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(() => Boolean)
+  removeUser(@Args('userId') { id }: IdInput) {
     return this.userService.remove(id);
   }
 }

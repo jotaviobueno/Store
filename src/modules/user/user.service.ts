@@ -1,28 +1,72 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserInput, UpdateUserInput } from 'src/domain/dtos';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  CreateUserInput,
+  PaginationOptionsInput,
+  UpdateUserInput,
+} from 'src/domain/dtos';
 import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+  async create(createUserInput: CreateUserInput) {
+    const usernameExist = await this.userRepository.findByUsername(
+      createUserInput.username,
+    );
+
+    if (usernameExist)
+      throw new HttpException('Username already exists', HttpStatus.CONFLICT);
+
+    const emailExist = await this.userRepository.findByEmail(
+      createUserInput.email,
+    );
+
+    if (emailExist)
+      throw new HttpException('Email already exists', HttpStatus.CONFLICT);
+
+    const user = await this.userRepository.create(createUserInput);
+
+    return user;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  findAll(paginationOptions: PaginationOptionsInput) {
+    return this.userRepository.findAll(paginationOptions);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.userRepository.findOne(id);
+
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    return user;
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserInput: UpdateUserInput) {
+    const user = await this.findOne(id);
+
+    const update = await this.userRepository.update(user.id, updateUserInput);
+
+    if (!update)
+      throw new HttpException(
+        'Failed to update your account',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+
+    return update;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.findOne(id);
+
+    const remove = await this.userRepository.softDelete(user.id);
+
+    if (!remove)
+      throw new HttpException(
+        'Failed to delete your account',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+
+    return true;
   }
 }

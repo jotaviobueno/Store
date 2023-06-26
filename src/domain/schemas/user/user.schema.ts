@@ -18,7 +18,6 @@ export class UserSchema implements User {
   @Field()
   email: string;
 
-  @Field()
   password: string;
 
   @Field({ nullable: true })
