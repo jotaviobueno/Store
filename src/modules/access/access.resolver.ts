@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Context,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { AccessService } from './access.service';
 import { AccessSchema, UserSchema } from 'src/domain/schemas';
 import {
@@ -34,12 +42,20 @@ export class AccessResolver {
   }
 
   @Query(() => AccessSchema, { name: 'access' })
-  findOne(@Args('id') id: string) {
+  findOne(@Args('accessId') { id }: IdInput) {
     return this.accessService.findOne(id);
   }
 
   @Mutation(() => Boolean)
   removeAccess(@Args('accessId') { id }: IdInput) {
     return this.accessService.remove(id);
+  }
+
+  @ResolveField(() => UserSchema)
+  user(
+    @Parent()
+    { userId }: AccessSchema,
+  ) {
+    return this.accessService.getUser(userId);
   }
 }

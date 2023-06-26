@@ -26,13 +26,27 @@ type AccessSchema {
   userAgent: String!
   lastAccess: DateTime!
   disconnectedAt: DateTime
+  user: UserSchema!
+}
+
+type ArticleSchema {
+  id: String!
+  title: String!
+  body: String!
+  imagesUrl: [String!]!
+  published: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  author: UserSchema!
 }
 
 type Query {
   users(paginationOptions: PaginationOptionsInput!): [UserSchema!]!
   user(userId: IdInput!): UserSchema!
   accesses(paginationOptions: PaginationOptionsInput!): [AccessSchema!]!
-  access(id: String!): AccessSchema!
+  access(accessId: IdInput!): AccessSchema!
+  articles(paginationOptions: PaginationOptionsInput!, searchArticleInput: SearchArticleInput!): [ArticleSchema!]!
+  article(articleId: IdInput!): ArticleSchema!
 }
 
 input PaginationOptionsInput {
@@ -44,12 +58,19 @@ input IdInput {
   id: String!
 }
 
+input SearchArticleInput {
+  q: String
+}
+
 type Mutation {
   createUser(createUserInput: CreateUserInput!): UserSchema!
   updateUser(userId: IdInput!, updateUserInput: UpdateUserInput!): UserSchema!
   removeUser(userId: IdInput!): Boolean!
   createAccess(createAccessInput: CreateAccessInput!): String!
   removeAccess(accessId: IdInput!): Boolean!
+  createArticle(createArticleInput: CreateArticleInput!): ArticleSchema!
+  updateArticle(articleId: IdInput!, updateArticleInput: UpdateArticleInput!): ArticleSchema!
+  removeArticle(articleId: IdInput!): ArticleSchema!
 }
 
 input CreateUserInput {
@@ -71,4 +92,18 @@ input UpdateUserInput {
 input CreateAccessInput {
   email: String!
   password: String!
+}
+
+input CreateArticleInput {
+  title: String!
+  body: String!
+  imagesUrl: String
+  published: Boolean
+}
+
+input UpdateArticleInput {
+  title: String
+  body: String
+  imagesUrl: String
+  published: Boolean
 }

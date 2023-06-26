@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AccessService } from './access.service';
 import { AccessResolver } from './access.resolver';
 import { AccessRepository } from './access.repository';
@@ -9,7 +9,7 @@ import { AuthGuard } from './guard/auth.guard';
 
 @Module({
   imports: [
-    UserModule,
+    forwardRef(() => UserModule),
     JwtModule.register({
       global: true,
       secret: environment.JWT_SECRET,
