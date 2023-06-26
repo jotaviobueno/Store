@@ -11,12 +11,12 @@ datasource db {
 }
 
 model Access {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userAgent String   @map("user_agent") @db.String
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
-  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamp
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?  @map("user_id") @db.ObjectId
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  userAgent      String    @map("user_agent") @db.String
+  lastAccess     DateTime  @default(now()) @map("last_access") @db.Timestamp
+  disconnectedAt DateTime? @map("disconnected_at") @db.Timestamp
+  User           User?     @relation(fields: [userId], references: [id])
+  userId         String?   @map("user_id") @db.ObjectId
 }
 
 model User {
