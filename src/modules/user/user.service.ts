@@ -5,6 +5,7 @@ import {
   UpdateUserInput,
 } from 'src/domain/dtos';
 import { UserRepository } from './user.repository';
+import { hash } from 'src/domain/utils';
 
 @Injectable()
 export class UserService {
@@ -25,7 +26,10 @@ export class UserService {
     if (emailExist)
       throw new HttpException('Email already exists', HttpStatus.CONFLICT);
 
-    const user = await this.userRepository.create(createUserInput);
+    const user = await this.userRepository.create({
+      ...createUserInput,
+      password: await hash(createUserInput.password),
+    });
 
     return user;
   }
@@ -36,6 +40,14 @@ export class UserService {
 
   async findOne(id: string) {
     const user = await this.userRepository.findOne(id);
+
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    return user;
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findByEmail(email);
 
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 

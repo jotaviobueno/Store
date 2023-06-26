@@ -21,9 +21,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type AccessSchema {
+  id: String!
+  userAgent: String!
+  lastAccess: DateTime!
+  disconnectedAt: DateTime
+}
+
 type Query {
   users(paginationOptions: PaginationOptionsInput!): [UserSchema!]!
   user(userId: IdInput!): UserSchema!
+  accesses(paginationOptions: PaginationOptionsInput!): [AccessSchema!]!
+  access(id: String!): AccessSchema!
 }
 
 input PaginationOptionsInput {
@@ -39,6 +48,8 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): UserSchema!
   updateUser(userId: IdInput!, updateUserInput: UpdateUserInput!): UserSchema!
   removeUser(userId: IdInput!): Boolean!
+  createAccess(createAccessInput: CreateAccessInput!): String!
+  removeAccess(accessId: IdInput!): Boolean!
 }
 
 input CreateUserInput {
@@ -55,4 +66,9 @@ input UpdateUserInput {
   username: String
   email: String
   password: String
+}
+
+input CreateAccessInput {
+  email: String!
+  password: String!
 }
