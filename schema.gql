@@ -1,0 +1,58 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserSchema {
+  id: String!
+  firstName: String!
+  lastName: String!
+  username: String!
+  email: String!
+  country: String
+  city: String
+  state: String
+  avatarUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  users(paginationOptions: PaginationOptionsInput!): [UserSchema!]!
+  user(userId: IdInput!): UserSchema!
+}
+
+input PaginationOptionsInput {
+  page: Float = 1
+  per_page: Float = 10
+}
+
+input IdInput {
+  id: String!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): UserSchema!
+  updateUser(userId: IdInput!, updateUserInput: UpdateUserInput!): UserSchema!
+  removeUser(userId: IdInput!): Boolean!
+}
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  username: String!
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  username: String
+  email: String
+  password: String
+}
