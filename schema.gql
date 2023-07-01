@@ -40,6 +40,20 @@ type ArticleSchema {
   author: UserSchema!
 }
 
+type CategorySchema {
+  id: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TagSchema {
+  id: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   users(paginationOptions: PaginationOptionsInput!): [UserSchema!]!
   user(userId: IdInput!): UserSchema!
@@ -47,6 +61,10 @@ type Query {
   access(accessId: IdInput!): AccessSchema!
   articles(paginationOptions: PaginationOptionsInput!, searchArticleInput: SearchArticleInput!): [ArticleSchema!]!
   article(articleId: IdInput!): ArticleSchema!
+  tags(paginationOption: PaginationOptionsInput!): [TagSchema!]!
+  tag(tagId: IdInput!): TagSchema!
+  categories(paginationOptions: PaginationOptionsInput!): [CategorySchema!]!
+  category(categoryId: IdInput!): CategorySchema!
 }
 
 input PaginationOptionsInput {
@@ -71,6 +89,10 @@ type Mutation {
   createArticle(createArticleInput: CreateArticleInput!): ArticleSchema!
   updateArticle(articleId: IdInput!, updateArticleInput: UpdateArticleInput!): ArticleSchema!
   removeArticle(articleId: IdInput!): ArticleSchema!
+  updateTag(tagId: IdInput!, updateTagInput: UpdateTagInput!): TagSchema!
+  removeTag(tagId: IdInput!): Boolean!
+  updateCategory(categoryId: IdInput!, updateCategoryInput: UpdateCategoryInput!): CategorySchema!
+  removeCategory(categoryId: IdInput!): Boolean!
 }
 
 input CreateUserInput {
@@ -98,6 +120,8 @@ input CreateArticleInput {
   title: String!
   body: String!
   imagesUrl: String
+  tags: [String!]!
+  categories: [String!]!
   published: Boolean
 }
 
@@ -105,5 +129,15 @@ input UpdateArticleInput {
   title: String
   body: String
   imagesUrl: String
+  tags: [String!]
+  categories: [String!]
   published: Boolean
+}
+
+input UpdateTagInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  name: String!
 }

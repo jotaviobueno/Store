@@ -7,19 +7,41 @@ import {
 } from 'src/domain/dtos';
 import { ArticleRepository } from './article.repository';
 import { UserService } from '../user/user.service';
+import { TagService } from '../tag/tag.service';
+import { CategoryService } from '../category/category.service';
+import { ArticleTagService } from '../article-tag/article-tag.service';
+import { ArticleCategoryService } from '../article-category/article-category.service';
 
 @Injectable()
 export class ArticleService {
   constructor(
     private readonly articleRepository: ArticleRepository,
     private readonly userService: UserService,
+    private readonly tagService: TagService,
+    private readonly categoryService: CategoryService,
+    private readonly articleTagService: ArticleTagService,
+    private readonly articleCategoryService: ArticleCategoryService,
   ) {}
 
-  async create(userId: string, createArticleInput: CreateArticleInput) {
-    const article = await this.articleRepository.create(
+  async create(
+    userId: string,
+    { categories, tags, ...createArticleInput }: CreateArticleInput,
+  ) {
+    const tagsCreated = await this.tagService.create({
       userId,
-      createArticleInput,
-    );
+      name: tags,
+    });
+
+    const categoriesCreated = await this.categoryService.create({
+      userId,
+      name: categories,
+    });
+
+    const article = await this.articleRepository.create(userId, {
+      ...createArticleInput,
+      tags: tagsCreated.map((tag) => tag.id),
+      categories: categoriesCreated.map((category) => category.id),
+    });
 
     return article;
   }
@@ -41,6 +63,10 @@ export class ArticleService {
       throw new HttpException('Article not found', HttpStatus.NOT_FOUND);
 
     return article;
+  }
+
+  async findMany(id: string) {
+    return this.articleRepository.findMany(id);
   }
 
   async update(id: string, updateArticleInput: UpdateArticleInput) {

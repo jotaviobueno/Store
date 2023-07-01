@@ -16,6 +16,8 @@ export class ArticleRepository {
     userId: string,
     createArticleInput: CreateArticleInput,
   ): Promise<ArticleSchema> {
+    console.log(createArticleInput);
+
     return this.prismaService.article.create({
       data: {
         ...createArticleInput,
@@ -49,6 +51,12 @@ export class ArticleRepository {
       },
       skip: (page - 1) * per_page,
       take: per_page,
+    });
+  }
+
+  findMany(id: string): Promise<ArticleSchema[]> {
+    return this.prismaService.article.findMany({
+      where: {},
     });
   }
 

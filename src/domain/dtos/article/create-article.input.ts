@@ -1,6 +1,7 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import {
   ArrayMaxSize,
+  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsNotEmpty,
@@ -28,6 +29,20 @@ export class CreateArticleInput {
   @IsOptional()
   @ArrayMaxSize(5)
   imagesUrl?: string;
+
+  @Field(() => [String])
+  @IsArray()
+  @IsNotEmpty()
+  @ArrayMaxSize(5)
+  @ArrayMinSize(1)
+  tags?: string[];
+
+  @Field(() => [String])
+  @IsArray()
+  @IsNotEmpty()
+  @ArrayMaxSize(5)
+  @ArrayMinSize(1)
+  categories?: string[];
 
   @IsBoolean()
   @IsOptional()
