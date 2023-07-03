@@ -1,17 +1,30 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import {
   CreateCategoryInput,
   PaginationOptionsInput,
   UpdateCategoryInput,
 } from 'src/domain/dtos';
 import { CategoryRepository } from './category.repository';
+import { ArticleCategoryService } from '../article-category/article-category.service';
+import { ArticleService } from '../article/article.service';
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly categoryRepository: CategoryRepository) {}
+  constructor(
+    private readonly categoryRepository: CategoryRepository,
+    private readonly articleCategoryService: ArticleCategoryService,
+    @Inject(forwardRef(() => ArticleService))
+    private readonly articleService: ArticleService,
+  ) {}
 
-  async create(createCategoryInput: CreateCategoryInput) {
-    return await Promise.all(
+  async create({ articleId, ...createCategoryInput }: CreateCategoryInput) {
+    const categories = await Promise.all(
       createCategoryInput.name.map(async (name) => {
         const tagExist = await this.categoryRepository.findByName(name);
 
@@ -20,10 +33,25 @@ export class CategoryService {
         return this.categoryRepository.create(name, createCategoryInput);
       }),
     );
+
+    await Promise.all(
+      categories.map(async (categories) => {
+        await this.articleCategoryService.create({
+          categoryId: categories.id,
+          articleId,
+        });
+      }),
+    );
+
+    return categories;
   }
 
   findAll(paginationOptions: PaginationOptionsInput) {
     return this.categoryRepository.findAll(paginationOptions);
+  }
+
+  findMany(categoriesIds: string[]) {
+    return this.categoryRepository.findMany(categoriesIds);
   }
 
   async findOne(id: string) {
@@ -64,5 +92,15 @@ export class CategoryService {
       );
 
     return true;
+  }
+
+  async getArticlesByCategoryId(categoryId: string) {
+    const categories = await this.articleCategoryService.findByCategoryId(
+      categoryId,
+    );
+
+    return this.articleService.findMany(
+      categories.map((category) => category.articleId),
+    );
   }
 }

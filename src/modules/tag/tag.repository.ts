@@ -39,6 +39,16 @@ export class TagRepository {
     });
   }
 
+  findMany(tagsIds: string[]): Promise<TagSchema[]> {
+    return this.prismaService.tag.findMany({
+      where: {
+        id: {
+          in: tagsIds,
+        },
+      },
+    });
+  }
+
   findOne(id: string): Promise<TagSchema> {
     return this.prismaService.tag.findFirst({
       where: {

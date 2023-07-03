@@ -16,4 +16,20 @@ export class ArticleCategoryRepository {
       },
     });
   }
+
+  findByArticleId(articleId: string): Promise<ArticleCategorySchema[]> {
+    return this.prismaService.articleCategory.findMany({
+      where: {
+        articleId,
+      },
+    });
+  }
+
+  findByCategoryId(categoryId: string): Promise<ArticleCategorySchema[]> {
+    return this.prismaService.articleCategory.findMany({
+      where: {
+        categoryId,
+      },
+    });
+  }
 }

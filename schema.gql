@@ -38,6 +38,8 @@ type ArticleSchema {
   createdAt: DateTime!
   updatedAt: DateTime!
   author: UserSchema!
+  categories: [CategorySchema!]!
+  tags: [TagSchema!]!
 }
 
 type CategorySchema {
@@ -45,6 +47,7 @@ type CategorySchema {
   name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  articles: [ArticleSchema!]!
 }
 
 type TagSchema {
@@ -52,6 +55,7 @@ type TagSchema {
   name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  articles: [ArticleSchema!]!
 }
 
 type Query {

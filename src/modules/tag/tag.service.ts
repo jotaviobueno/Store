@@ -12,6 +12,7 @@ import {
 } from 'src/domain/dtos';
 import { TagRepository } from './tag.repository';
 import { ArticleService } from '../article/article.service';
+import { ArticleTagService } from '../article-tag/article-tag.service';
 
 @Injectable()
 export class TagService {
@@ -19,10 +20,11 @@ export class TagService {
     private readonly tagRepository: TagRepository,
     @Inject(forwardRef(() => ArticleService))
     private readonly articleService: ArticleService,
+    private readonly articleTagService: ArticleTagService,
   ) {}
 
-  async create(createTagInput: CreateTagInput) {
-    return await Promise.all(
+  async create({ articleId, ...createTagInput }: CreateTagInput) {
+    const tags = await Promise.all(
       createTagInput.name.map(async (name) => {
         const tagExist = await this.tagRepository.findByName(name);
 
@@ -31,6 +33,14 @@ export class TagService {
         return this.tagRepository.create(name, createTagInput);
       }),
     );
+
+    await Promise.all(
+      tags.map(async (tag) => {
+        await this.articleTagService.create({ tagId: tag.id, articleId });
+      }),
+    );
+
+    return tags;
   }
 
   findAll(paginationOptions: PaginationOptionsInput) {
@@ -43,6 +53,10 @@ export class TagService {
     if (!tag) throw new HttpException('Tag not found', HttpStatus.NOT_FOUND);
 
     return tag;
+  }
+
+  findMany(tagsIds: string[]) {
+    return this.tagRepository.findMany(tagsIds);
   }
 
   async update(id: string, updateTagInput: UpdateTagInput) {
@@ -73,7 +87,9 @@ export class TagService {
     return true;
   }
 
-  getArticle(articleId: string) {
-    return this.articleService.findOne(articleId);
+  async getArticlesByTagId(tagId: string) {
+    const tags = await this.articleTagService.findByTagId(tagId);
+
+    return this.articleService.findMany(tags.map((tag) => tag.articleId));
   }
 }

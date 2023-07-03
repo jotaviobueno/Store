@@ -16,4 +16,20 @@ export class ArticleTagRepository {
       },
     });
   }
+
+  findByArticleId(articleId: string): Promise<ArticleTagSchema[]> {
+    return this.prismaService.articleTag.findMany({
+      where: {
+        articleId,
+      },
+    });
+  }
+
+  findByTagId(tagId: string): Promise<ArticleTagSchema[]> {
+    return this.prismaService.articleTag.findMany({
+      where: {
+        tagId,
+      },
+    });
+  }
 }

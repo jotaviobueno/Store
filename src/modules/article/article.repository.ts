@@ -54,9 +54,13 @@ export class ArticleRepository {
     });
   }
 
-  findMany(id: string): Promise<ArticleSchema[]> {
+  findMany(ids: string[]): Promise<ArticleSchema[]> {
     return this.prismaService.article.findMany({
-      where: {},
+      where: {
+        id: {
+          in: ids,
+        },
+      },
     });
   }
 

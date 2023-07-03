@@ -45,6 +45,16 @@ export class CategoryRepository {
     });
   }
 
+  findMany(categoriesIds: string[]): Promise<CategorySchema[]> {
+    return this.prismaService.category.findMany({
+      where: {
+        id: {
+          in: categoriesIds,
+        },
+      },
+    });
+  }
+
   findOne(id: string): Promise<CategorySchema> {
     return this.prismaService.category.findFirst({
       where: {

@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import {
   CreateArticleInput,
   PaginationOptionsInput,
@@ -19,28 +24,28 @@ export class ArticleService {
     private readonly userService: UserService,
     private readonly tagService: TagService,
     private readonly categoryService: CategoryService,
-    private readonly articleTagService: ArticleTagService,
     private readonly articleCategoryService: ArticleCategoryService,
+    private readonly articleTagService: ArticleTagService,
   ) {}
 
   async create(
     userId: string,
     { categories, tags, ...createArticleInput }: CreateArticleInput,
   ) {
-    const tagsCreated = await this.tagService.create({
+    const article = await this.articleRepository.create(userId, {
+      ...createArticleInput,
+    });
+
+    await this.tagService.create({
       userId,
+      articleId: article.id,
       name: tags,
     });
 
-    const categoriesCreated = await this.categoryService.create({
+    await this.categoryService.create({
       userId,
+      articleId: article.id,
       name: categories,
-    });
-
-    const article = await this.articleRepository.create(userId, {
-      ...createArticleInput,
-      tags: tagsCreated.map((tag) => tag.id),
-      categories: categoriesCreated.map((category) => category.id),
     });
 
     return article;
@@ -65,8 +70,8 @@ export class ArticleService {
     return article;
   }
 
-  async findMany(id: string) {
-    return this.articleRepository.findMany(id);
+  async findMany(ids: string[]) {
+    return this.articleRepository.findMany(ids);
   }
 
   async update(id: string, updateArticleInput: UpdateArticleInput) {
@@ -102,5 +107,23 @@ export class ArticleService {
 
   getAuthor(userId: string) {
     return this.userService.findOne(userId);
+  }
+
+  async getArticleByTagId(tagId: string) {}
+
+  async getCategory(articleId: string) {
+    const categories = await this.articleCategoryService.findByArticleId(
+      articleId,
+    );
+
+    return this.categoryService.findMany(
+      categories.map((category) => category.categoryId),
+    );
+  }
+
+  async getTag(articleId: string) {
+    const tags = await this.articleTagService.findByArticleId(articleId);
+
+    return this.tagService.findMany(tags.map((tag) => tag.tagId));
   }
 }

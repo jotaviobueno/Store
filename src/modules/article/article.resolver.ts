@@ -8,7 +8,12 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { ArticleService } from './article.service';
-import { ArticleSchema, UserSchema } from 'src/domain/schemas';
+import {
+  ArticleSchema,
+  CategorySchema,
+  TagSchema,
+  UserSchema,
+} from 'src/domain/schemas';
 import {
   CreateArticleInput,
   IdInput,
@@ -64,5 +69,21 @@ export class ArticleResolver {
     { userId }: ArticleSchema,
   ) {
     return this.articleService.getAuthor(userId);
+  }
+
+  @ResolveField(() => [CategorySchema])
+  categories(
+    @Parent()
+    { id: articleId }: ArticleSchema,
+  ) {
+    return this.articleService.getCategory(articleId);
+  }
+
+  @ResolveField(() => [TagSchema])
+  tags(
+    @Parent()
+    { id: articleId }: ArticleSchema,
+  ) {
+    return this.articleService.getTag(articleId);
   }
 }
