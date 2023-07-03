@@ -26,13 +26,49 @@ type AccessSchema {
   userAgent: String!
   lastAccess: DateTime!
   disconnectedAt: DateTime
+  user: UserSchema!
+}
+
+type ArticleSchema {
+  id: String!
+  title: String!
+  body: String!
+  imagesUrl: [String!]!
+  published: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  author: UserSchema!
+  categories: [CategorySchema!]!
+  tags: [TagSchema!]!
+}
+
+type CategorySchema {
+  id: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  articles: [ArticleSchema!]!
+}
+
+type TagSchema {
+  id: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  articles: [ArticleSchema!]!
 }
 
 type Query {
   users(paginationOptions: PaginationOptionsInput!): [UserSchema!]!
   user(userId: IdInput!): UserSchema!
   accesses(paginationOptions: PaginationOptionsInput!): [AccessSchema!]!
-  access(id: String!): AccessSchema!
+  access(accessId: IdInput!): AccessSchema!
+  articles(paginationOptions: PaginationOptionsInput!, searchArticleInput: SearchArticleInput!): [ArticleSchema!]!
+  article(articleId: IdInput!): ArticleSchema!
+  tags(paginationOption: PaginationOptionsInput!): [TagSchema!]!
+  tag(tagId: IdInput!): TagSchema!
+  categories(paginationOptions: PaginationOptionsInput!): [CategorySchema!]!
+  category(categoryId: IdInput!): CategorySchema!
 }
 
 input PaginationOptionsInput {
@@ -44,12 +80,23 @@ input IdInput {
   id: String!
 }
 
+input SearchArticleInput {
+  q: String
+}
+
 type Mutation {
   createUser(createUserInput: CreateUserInput!): UserSchema!
   updateUser(userId: IdInput!, updateUserInput: UpdateUserInput!): UserSchema!
   removeUser(userId: IdInput!): Boolean!
   createAccess(createAccessInput: CreateAccessInput!): String!
   removeAccess(accessId: IdInput!): Boolean!
+  createArticle(createArticleInput: CreateArticleInput!): ArticleSchema!
+  updateArticle(articleId: IdInput!, updateArticleInput: UpdateArticleInput!): ArticleSchema!
+  removeArticle(articleId: IdInput!): ArticleSchema!
+  updateTag(tagId: IdInput!, updateTagInput: UpdateTagInput!): TagSchema!
+  removeTag(tagId: IdInput!): Boolean!
+  updateCategory(categoryId: IdInput!, updateCategoryInput: UpdateCategoryInput!): CategorySchema!
+  removeCategory(categoryId: IdInput!): Boolean!
 }
 
 input CreateUserInput {
@@ -71,4 +118,30 @@ input UpdateUserInput {
 input CreateAccessInput {
   email: String!
   password: String!
+}
+
+input CreateArticleInput {
+  title: String!
+  body: String!
+  imagesUrl: String
+  tags: [String!]!
+  categories: [String!]!
+  published: Boolean
+}
+
+input UpdateArticleInput {
+  title: String
+  body: String
+  imagesUrl: String
+  tags: [String!]
+  categories: [String!]
+  published: Boolean
+}
+
+input UpdateTagInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  name: String!
 }

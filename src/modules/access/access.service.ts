@@ -66,4 +66,8 @@ export class AccessService {
 
     return true;
   }
+
+  getUser(userId: string) {
+    return this.userService.findOne(userId);
+  }
 }

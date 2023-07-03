@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UserSchema } from 'src/domain/schemas';
 import {
@@ -7,6 +7,8 @@ import {
   PaginationOptionsInput,
   UpdateUserInput,
 } from 'src/domain/dtos';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../access/guard/auth.guard';
 
 @Resolver(() => UserSchema)
 export class UserResolver {
@@ -35,6 +37,11 @@ export class UserResolver {
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ) {
     return this.userService.update(id, updateUserInput);
+  }
+
+  @UseGuards(AuthGuard)
+  whoAmI(@Context('user') user: UserSchema) {
+    return user;
   }
 
   @Mutation(() => Boolean)

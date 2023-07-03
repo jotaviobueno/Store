@@ -20,18 +20,74 @@ model Access {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String    @map("first_name") @db.String
-  lastName  String    @map("last_name") @db.String
-  username  String    @db.String
-  email     String    @db.String
-  password  String    @db.String
-  country   String?   @db.String
-  city      String?   @db.String
-  state     String?   @db.String
-  avatarUrl String?   @map("avatar_url") @db.String
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp
-  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamp
-  deletedAt DateTime? @map("deleted_at") @db.Timestamp
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  firstName String     @map("first_name") @db.String
+  lastName  String     @map("last_name") @db.String
+  username  String     @db.String
+  email     String     @db.String
+  password  String     @db.String
+  country   String?    @db.String
+  city      String?    @db.String
+  state     String?    @db.String
+  avatarUrl String?    @map("avatar_url") @db.String
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime   @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt DateTime?  @map("deleted_at") @db.Timestamp
   Access    Access[]
+  Article   Article[]
+  Category  Category[]
+  Tag       Tag[]
+}
+
+model Article {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  title           String            @db.String
+  body            String            @db.String
+  imagesUrl       String[]          @default([]) @map("images_url") @db.String
+  published       Boolean           @default(true) @db.Bool
+  User            User?             @relation(fields: [userId], references: [id])
+  userId          String            @map("user_id") @db.ObjectId
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamp
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt       DateTime?         @map("deleted_at") @db.Timestamp
+  ArticleCategory ArticleCategory[]
+  ArticleTag      ArticleTag[]
+}
+
+model ArticleCategory {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  Article    Article  @relation(fields: [articleId], references: [id])
+  articleId  String   @map("article_id") @db.ObjectId
+  Category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String   @map("category_id") @db.ObjectId
+}
+
+model Category {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  name            String            @db.String
+  User            User?             @relation(fields: [userId], references: [id])
+  userId          String            @map("user_id") @db.ObjectId
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamp
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt       DateTime?         @map("deleted_at") @db.Timestamp
+  ArticleCategory ArticleCategory[]
+}
+
+model ArticleTag {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  Article   Article @relation(fields: [articleId], references: [id])
+  articleId String  @map("article_id") @db.ObjectId
+  Tag       Tag     @relation(fields: [tagId], references: [id])
+  tagId     String  @map("tag_id") @db.ObjectId
+}
+
+model Tag {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  name       String       @db.String
+  User       User?        @relation(fields: [userId], references: [id])
+  userId     String       @map("user_id") @db.ObjectId
+  createdAt  DateTime     @default(now()) @map("created_at") @db.Timestamp
+  updatedAt  DateTime     @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt  DateTime?    @map("deleted_at") @db.Timestamp
+  ArticleTag ArticleTag[]
 }
