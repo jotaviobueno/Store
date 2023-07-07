@@ -1,11 +1,11 @@
 import {
-  Resolver,
-  Query,
-  Mutation,
   Args,
   Context,
-  ResolveField,
+  Mutation,
   Parent,
+  Query,
+  ResolveField,
+  Resolver,
 } from '@nestjs/graphql';
 import { ArticleService } from './article.service';
 import {
@@ -23,11 +23,16 @@ import {
 } from 'src/domain/dtos';
 import { AuthGuard } from '../access/guard/auth.guard';
 import { UseGuards } from '@nestjs/common';
+import { PERMISSION_ENUM } from '../../domain/enums';
+import { Permissions } from '../permission/decorator/permission.decorator';
+import { RoleGuard } from '../role/guards/role.guard';
 
 @Resolver(() => ArticleSchema)
 export class ArticleResolver {
   constructor(private readonly articleService: ArticleService) {}
 
+  @UseGuards(AuthGuard)
+  @Permissions(PERMISSION_ENUM.CAN_CREATE_ARTICLE)
   @Mutation(() => ArticleSchema)
   @UseGuards(AuthGuard)
   createArticle(
@@ -50,6 +55,11 @@ export class ArticleResolver {
     return this.articleService.findOne(id);
   }
 
+  @UseGuards(AuthGuard, RoleGuard)
+  @Permissions(
+    PERMISSION_ENUM.CAN_UPDATE_ANY_ARTICLE,
+    PERMISSION_ENUM.CAN_UPDATE_OWN_ARTICLE,
+  )
   @Mutation(() => ArticleSchema)
   updateArticle(
     @Args('articleId') { id }: IdInput,
@@ -58,6 +68,11 @@ export class ArticleResolver {
     return this.articleService.update(id, updateArticleInput);
   }
 
+  @UseGuards(AuthGuard, RoleGuard)
+  @Permissions(
+    PERMISSION_ENUM.CAN_DELETE_ANY_ARTICLE,
+    PERMISSION_ENUM.CAN_DELETE_OWN_ARTICLE,
+  )
   @Mutation(() => ArticleSchema)
   removeArticle(@Args('articleId') { id }: IdInput) {
     return this.articleService.remove(id);

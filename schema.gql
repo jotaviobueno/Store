@@ -58,6 +58,25 @@ type TagSchema {
   articles: [ArticleSchema!]!
 }
 
+type RoleSchema {
+  id: String!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  permissions: [PermissionSchema!]!
+}
+
+type UserRoleSchema {
+  id: String!
+  createdAt: DateTime!
+}
+
+type PermissionSchema {
+  id: String!
+  name: String!
+}
+
 type Query {
   users(paginationOptions: PaginationOptionsInput!): [UserSchema!]!
   user(userId: IdInput!): UserSchema!
@@ -69,6 +88,8 @@ type Query {
   tag(tagId: IdInput!): TagSchema!
   categories(paginationOptions: PaginationOptionsInput!): [CategorySchema!]!
   category(categoryId: IdInput!): CategorySchema!
+  roles(paginationOptions: PaginationOptionsInput!): [RoleSchema!]!
+  role(id: IdInput!): RoleSchema!
 }
 
 input PaginationOptionsInput {
@@ -97,6 +118,8 @@ type Mutation {
   removeTag(tagId: IdInput!): Boolean!
   updateCategory(categoryId: IdInput!, updateCategoryInput: UpdateCategoryInput!): CategorySchema!
   removeCategory(categoryId: IdInput!): Boolean!
+  assignUserInRole(userRoleInput: UserRoleInput!): UserRoleSchema!
+  removeUserRole(userRoleInput: UserRoleInput!): Boolean!
 }
 
 input CreateUserInput {
@@ -144,4 +167,9 @@ input UpdateTagInput {
 
 input UpdateCategoryInput {
   name: String!
+}
+
+input UserRoleInput {
+  userId: String!
+  roleId: String!
 }

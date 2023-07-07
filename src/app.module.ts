@@ -8,6 +8,10 @@ import { CategoryModule } from './modules/category/category.module';
 import { TagModule } from './modules/tag/tag.module';
 import { ArticleTagModule } from './modules/article-tag/article-tag.module';
 import { ArticleCategoryModule } from './modules/article-category/article-category.module';
+import { RoleModule } from './modules/role/role.module';
+import { UserRoleModule } from './modules/user-role/user-role.module';
+import { RolePermissionModule } from './modules/role-permission/role-permission.module';
+import { PermissionModule } from './modules/permission/permission.module';
 
 @Module({
   imports: [
@@ -20,6 +24,10 @@ import { ArticleCategoryModule } from './modules/article-category/article-catego
     TagModule,
     ArticleTagModule,
     ArticleCategoryModule,
+    RoleModule,
+    UserRoleModule,
+    RolePermissionModule,
+    PermissionModule,
   ],
 })
 export class AppModule {}

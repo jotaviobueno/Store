@@ -13,6 +13,11 @@ import {
   PaginationOptionsInput,
   UpdateTagInput,
 } from 'src/domain/dtos';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../access/guard/auth.guard';
+import { Permissions } from '../permission/decorator/permission.decorator';
+import { PERMISSION_ENUM } from '../../domain/enums';
+import { RoleGuard } from '../role/guards/role.guard';
 
 @Resolver(() => TagSchema)
 export class TagResolver {
@@ -28,6 +33,11 @@ export class TagResolver {
     return this.tagService.findOne(id);
   }
 
+  @UseGuards(AuthGuard, RoleGuard)
+  @Permissions(
+    PERMISSION_ENUM.CAN_UPDATE_OWN_TAG,
+    PERMISSION_ENUM.CAN_UPDATE_ANY_TAG,
+  )
   @Mutation(() => TagSchema)
   updateTag(
     @Args('tagId') { id }: IdInput,
@@ -36,6 +46,11 @@ export class TagResolver {
     return this.tagService.update(id, updateTagInput);
   }
 
+  @UseGuards(AuthGuard, RoleGuard)
+  @Permissions(
+    PERMISSION_ENUM.CAN_DELETE_OWN_TAG,
+    PERMISSION_ENUM.CAN_DELETE_ANY_TAG,
+  )
   @Mutation(() => Boolean)
   removeTag(@Args('tagId') { id }: IdInput) {
     return this.tagService.remove(id);

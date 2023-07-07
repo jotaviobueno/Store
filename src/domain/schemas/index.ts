@@ -5,3 +5,7 @@ export * from './category/index';
 export * from './tag/index';
 export * from './article-category/index';
 export * from './article-tag/index';
+export * from './role/index';
+export * from './user-role/index';
+export * from './role-permission/index';
+export * from './permission/index';

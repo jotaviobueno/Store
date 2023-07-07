@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { ArticleResolver } from './article.resolver';
 import { ArticleRepository } from './article.repository';
@@ -8,6 +8,7 @@ import { TagModule } from '../tag/tag.module';
 import { CategoryModule } from '../category/category.module';
 import { ArticleCategoryModule } from '../article-category/article-category.module';
 import { ArticleTagModule } from '../article-tag/article-tag.module';
+import { UserRoleModule } from '../user-role/user-role.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ArticleTagModule } from '../article-tag/article-tag.module';
     CategoryModule,
     ArticleTagModule,
     ArticleCategoryModule,
+    UserRoleModule,
   ],
   providers: [ArticleResolver, ArticleService, ArticleRepository],
   exports: [ArticleService],
