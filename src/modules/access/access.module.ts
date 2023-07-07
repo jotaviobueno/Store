@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AccessService } from './access.service';
 import { AccessResolver } from './access.resolver';
 import { AccessRepository } from './access.repository';

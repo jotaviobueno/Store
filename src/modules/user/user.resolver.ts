@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UserSchema } from 'src/domain/schemas';
 import {
@@ -9,6 +9,8 @@ import {
 } from 'src/domain/dtos';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../access/guard/auth.guard';
+import { Permissions } from '../permission/decorator/permission.decorator';
+import { PERMISSION_ENUM } from '../../domain/enums';
 
 @Resolver(() => UserSchema)
 export class UserResolver {
@@ -19,6 +21,8 @@ export class UserResolver {
     return this.userService.create(createUserInput);
   }
 
+  @UseGuards(AuthGuard)
+  @Permissions(PERMISSION_ENUM.CAN_READ_USER)
   @Query(() => [UserSchema], { name: 'users' })
   findAll(
     @Args('paginationOptions') paginationOptions: PaginationOptionsInput,
@@ -26,11 +30,18 @@ export class UserResolver {
     return this.userService.findAll(paginationOptions);
   }
 
+  @UseGuards(AuthGuard)
+  @Permissions(PERMISSION_ENUM.CAN_READ_USER)
   @Query(() => UserSchema, { name: 'user' })
   findOne(@Args('userId') { id }: IdInput) {
     return this.userService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
+  @Permissions(
+    PERMISSION_ENUM.CAN_UPDATE_ANY_USER,
+    PERMISSION_ENUM.CAN_UPDATE_OWN_USER,
+  )
   @Mutation(() => UserSchema)
   updateUser(
     @Args('userId') { id }: IdInput,
@@ -44,6 +55,8 @@ export class UserResolver {
     return user;
   }
 
+  @UseGuards(AuthGuard)
+  @Permissions(PERMISSION_ENUM.CAN_DELETE_ANY_USER)
   @Mutation(() => Boolean)
   removeUser(@Args('userId') { id }: IdInput) {
     return this.userService.remove(id);
