@@ -12,6 +12,7 @@ import { RoleModule } from './modules/role/role.module';
 import { UserRoleModule } from './modules/user-role/user-role.module';
 import { RolePermissionModule } from './modules/role-permission/role-permission.module';
 import { PermissionModule } from './modules/permission/permission.module';
+import { LogModule } from './modules/log/log.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PermissionModule } from './modules/permission/permission.module';
     UserRoleModule,
     RolePermissionModule,
     PermissionModule,
+    LogModule,
   ],
 })
 export class AppModule {}

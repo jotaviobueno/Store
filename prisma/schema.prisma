@@ -125,3 +125,13 @@ model Permission {
   name           String           @unique @db.String
   rolePermission RolePermission[]
 }
+
+model Log {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String   @db.String
+  model     String
+  action    String   @map("action")
+  oldValue  Json?    @map("old_value")
+  newValue  Json     @map("new_value")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+}
