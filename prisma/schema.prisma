@@ -164,3 +164,13 @@ model Cart {
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamp
   deletedAt DateTime? @map("deleted_at") @db.Timestamp
 }
+
+model Log {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String   @db.String
+  model     String
+  action    String   @map("action")
+  oldValue  Json?    @map("old_value")
+  newValue  Json     @map("new_value")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+}

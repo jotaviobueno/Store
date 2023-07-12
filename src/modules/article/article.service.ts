@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  forwardRef,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   CreateArticleInput,
   PaginationOptionsInput,
@@ -108,8 +103,6 @@ export class ArticleService {
   getAuthor(userId: string) {
     return this.userService.findOne(userId);
   }
-
-  async getArticleByTagId(tagId: string) {}
 
   async getCategory(articleId: string) {
     const categories = await this.articleCategoryService.findByArticleId(

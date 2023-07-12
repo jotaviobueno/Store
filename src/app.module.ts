@@ -15,6 +15,7 @@ import { PermissionModule } from './modules/permission/permission.module';
 import { ProductModule } from './modules/product/product.module';
 import { CartModule } from './modules/cart/cart.module';
 import { StockModule } from './modules/stock/stock.module';
+import { LogModule } from './modules/log/log.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { StockModule } from './modules/stock/stock.module';
     ProductModule,
     CartModule,
     StockModule,
+    LogModule,
   ],
 })
 export class AppModule {}
