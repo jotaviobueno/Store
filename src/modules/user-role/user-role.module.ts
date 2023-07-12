@@ -7,7 +7,11 @@ import { UserRoleRepository } from './user-role.repository';
 import { AccessModule } from '../access/access.module';
 
 @Module({
-  imports: [UserModule, forwardRef(() => RoleModule), AccessModule, UserModule],
+  imports: [
+    forwardRef(() => UserModule),
+    forwardRef(() => RoleModule),
+    AccessModule,
+  ],
   providers: [UserRoleResolver, UserRoleService, UserRoleRepository],
   exports: [UserRoleService],
 })

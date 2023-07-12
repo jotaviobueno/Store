@@ -34,7 +34,7 @@ export class RoleGuard implements CanActivate {
 
     let hasPermission = false;
 
-    for (const { Role: role } of permissionsAndRoles) {
+    for (const { role } of permissionsAndRoles) {
       if (
         requiredRoles?.length >= 1 &&
         requiredRoles.some((requiredRole) => requiredRole === role.name)
@@ -42,7 +42,7 @@ export class RoleGuard implements CanActivate {
         hasPermission = true;
 
       if (requiredPermissions?.length >= 1)
-        for (const { Permission: permission } of role.rolePermission) {
+        for (const { permission } of role.rolePermission) {
           if (
             requiredPermissions.some(
               (requiredPermission) => requiredPermission === permission.name,

@@ -15,7 +15,7 @@ model Access {
   userAgent      String    @map("user_agent") @db.String
   lastAccess     DateTime  @default(now()) @map("last_access") @db.Timestamp
   disconnectedAt DateTime? @map("disconnected_at") @db.Timestamp
-  User           User?     @relation(fields: [userId], references: [id])
+  user           User?     @relation(fields: [userId], references: [id])
   userId         String?   @map("user_id") @db.ObjectId
 }
 
@@ -33,11 +33,13 @@ model User {
   createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp
   updatedAt DateTime   @default(now()) @map("updated_at") @db.Timestamp
   deletedAt DateTime?  @map("deleted_at") @db.Timestamp
-  Access    Access[]
-  Article   Article[]
-  Category  Category[]
-  Tag       Tag[]
-  UserRole  UserRole[]
+  access    Access[]
+  article   Article[]
+  category  Category[]
+  tag       Tag[]
+  userRole  UserRole[]
+  product   Product[]
+  Cart      Cart[]
 }
 
 model Article {
@@ -46,58 +48,58 @@ model Article {
   body            String            @db.String
   imagesUrl       String[]          @default([]) @map("images_url") @db.String
   published       Boolean           @default(true) @db.Bool
-  User            User?             @relation(fields: [userId], references: [id])
+  user            User?             @relation(fields: [userId], references: [id])
   userId          String            @map("user_id") @db.ObjectId
   createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamp
   updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamp
   deletedAt       DateTime?         @map("deleted_at") @db.Timestamp
-  ArticleCategory ArticleCategory[]
-  ArticleTag      ArticleTag[]
+  articleCategory ArticleCategory[]
+  articleTag      ArticleTag[]
 }
 
 model ArticleCategory {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  Article    Article  @relation(fields: [articleId], references: [id])
+  article    Article  @relation(fields: [articleId], references: [id])
   articleId  String   @map("article_id") @db.ObjectId
-  Category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
   categoryId String   @map("category_id") @db.ObjectId
 }
 
 model Category {
   id              String            @id @default(auto()) @map("_id") @db.ObjectId
   name            String            @db.String
-  User            User?             @relation(fields: [userId], references: [id])
+  user            User?             @relation(fields: [userId], references: [id])
   userId          String            @map("user_id") @db.ObjectId
   createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamp
   updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamp
   deletedAt       DateTime?         @map("deleted_at") @db.Timestamp
-  ArticleCategory ArticleCategory[]
+  articleCategory ArticleCategory[]
 }
 
 model ArticleTag {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  Article   Article @relation(fields: [articleId], references: [id])
+  article   Article @relation(fields: [articleId], references: [id])
   articleId String  @map("article_id") @db.ObjectId
-  Tag       Tag     @relation(fields: [tagId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
   tagId     String  @map("tag_id") @db.ObjectId
 }
 
 model Tag {
   id         String       @id @default(auto()) @map("_id") @db.ObjectId
   name       String       @db.String
-  User       User?        @relation(fields: [userId], references: [id])
+  user       User?        @relation(fields: [userId], references: [id])
   userId     String       @map("user_id") @db.ObjectId
   createdAt  DateTime     @default(now()) @map("created_at") @db.Timestamp
   updatedAt  DateTime     @default(now()) @map("updated_at") @db.Timestamp
   deletedAt  DateTime?    @map("deleted_at") @db.Timestamp
-  ArticleTag ArticleTag[]
+  articleTag ArticleTag[]
 }
 
 model UserRole {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("user_id") @db.ObjectId
-  Role      Role     @relation(fields: [roleId], references: [id])
+  role      Role     @relation(fields: [roleId], references: [id])
   roleId    String   @map("role_id") @db.ObjectId
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 }
@@ -109,19 +111,56 @@ model Role {
   createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamp
   updatedAt      DateTime         @default(now()) @map("updated_at") @db.Timestamp
   rolePermission RolePermission[]
-  UserRole       UserRole[]
+  userRole       UserRole[]
 }
 
 model RolePermission {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  Role         Role       @relation(fields: [roleId], references: [id])
-  roleId       String     @db.ObjectId
-  Permission   Permission @relation(fields: [permissionId], references: [id])
-  permissionId String     @db.ObjectId
+  role         Role       @relation(fields: [roleId], references: [id])
+  roleId       String     @map("role_id") @db.ObjectId
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId String     @map("permission_id") @db.ObjectId
 }
 
 model Permission {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
   name           String           @unique @db.String
   rolePermission RolePermission[]
+}
+
+model Product {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String    @db.String
+  description String    @db.String
+  imagesUrl   String[]  @default([]) @map("images_url") @db.String
+  price       Float     @db.Double
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @map("user_id") @db.ObjectId
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamp
+  cart        Cart[]
+  Stock       Stock[]
+}
+
+model Stock {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String
+  stock     Int      @db.Int
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String   @map("product_id") @db.ObjectId
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamp
+}
+
+model Cart {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String    @map("user_id") @db.ObjectId
+  quantity  Int       @db.Int
+  product   Product   @relation(fields: [productId], references: [id])
+  productId String    @map("product_id") @db.ObjectId
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp
 }

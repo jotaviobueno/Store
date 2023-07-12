@@ -3,7 +3,12 @@ import { roleModel } from './role.model';
 
 const prisma = new PrismaClient();
 
-async function main(roles) {
+interface Roles {
+  name: string;
+  permissions: string[];
+}
+
+async function main(roles: Roles[]) {
   return await prisma.$transaction(
     async (tx) => {
       for (const { name, permissions } of roles) {

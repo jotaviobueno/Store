@@ -8,3 +8,6 @@ export * from './category/index';
 export * from './article-category/index';
 export * from './article-tag/index';
 export * from './user-role/index';
+export * from './product/index';
+export * from './cart/index';
+export * from './stock/index';

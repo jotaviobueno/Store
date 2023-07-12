@@ -22,6 +22,9 @@ export const roleModel = [
       'CAN_ASSIGN_USER_ROLE',
       'CAN_REMOVE_USER_ROLE',
       'CAN_READ_ROLE',
+      /**/
+      'CAN_CREATE_PRODUCT',
+      'CAN_UPDATE_ANY_PRODUCT',
     ],
   },
   {
@@ -42,6 +45,9 @@ export const roleModel = [
       'CAN_READ_ARTICLE',
       'CAN_UPDATE_ANY_ARTICLE',
       'CAN_DELETE_ANY_ARTICLE',
+      /**/
+      'CAN_CREATE_PRODUCT',
+      'CAN_UPDATE_ANY_PRODUCT',
     ],
   },
   {
@@ -62,6 +68,9 @@ export const roleModel = [
       'CAN_READ_ARTICLE',
       'CAN_UPDATE_OWN_ARTICLE',
       'CAN_DELETE_OWN_ARTICLE',
+      /**/
+      'CAN_CREATE_PRODUCT',
+      'CAN_UPDATE_OWN_PRODUCT',
     ],
   },
 ];

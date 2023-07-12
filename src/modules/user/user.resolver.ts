@@ -11,6 +11,7 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../access/guard/auth.guard';
 import { Permissions } from '../permission/decorator/permission.decorator';
 import { PERMISSION_ENUM } from '../../domain/enums';
+import { RoleGuard } from '../role/guards/role.guard';
 
 @Resolver(() => UserSchema)
 export class UserResolver {
@@ -21,7 +22,7 @@ export class UserResolver {
     return this.userService.create(createUserInput);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(PERMISSION_ENUM.CAN_READ_USER)
   @Query(() => [UserSchema], { name: 'users' })
   findAll(
@@ -30,14 +31,14 @@ export class UserResolver {
     return this.userService.findAll(paginationOptions);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(PERMISSION_ENUM.CAN_READ_USER)
   @Query(() => UserSchema, { name: 'user' })
   findOne(@Args('userId') { id }: IdInput) {
     return this.userService.findOne(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(
     PERMISSION_ENUM.CAN_UPDATE_ANY_USER,
     PERMISSION_ENUM.CAN_UPDATE_OWN_USER,
@@ -55,7 +56,7 @@ export class UserResolver {
     return user;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(PERMISSION_ENUM.CAN_DELETE_ANY_USER)
   @Mutation(() => Boolean)
   removeUser(@Args('userId') { id }: IdInput) {
