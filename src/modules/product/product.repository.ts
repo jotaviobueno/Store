@@ -24,11 +24,16 @@ export class ProductRepository {
     });
   }
 
-  findAll(paginationOptions: PaginationOptionsInput): Promise<ProductSchema[]> {
+  findAll({
+    page,
+    per_page,
+  }: PaginationOptionsInput): Promise<ProductSchema[]> {
     return this.prismaService.product.findMany({
       where: {
         deletedAt: null,
       },
+      skip: (page - 1) * per_page,
+      take: per_page,
     });
   }
 
