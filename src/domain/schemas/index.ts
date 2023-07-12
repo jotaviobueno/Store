@@ -9,3 +9,4 @@ export * from './role/index';
 export * from './user-role/index';
 export * from './role-permission/index';
 export * from './permission/index';
+export * from './log/index';
