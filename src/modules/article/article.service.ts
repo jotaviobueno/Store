@@ -109,8 +109,6 @@ export class ArticleService {
     return this.userService.findOne(userId);
   }
 
-  async getArticleByTagId(tagId: string) {}
-
   async getCategory(articleId: string) {
     const categories = await this.articleCategoryService.findByArticleId(
       articleId,

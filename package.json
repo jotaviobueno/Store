@@ -18,7 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma:seed": "ts-node prisma/seed.ts"
+    "prisma:seed": "ts-node prisma/seed.ts",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/server": "^4.7.4",
@@ -34,6 +35,7 @@
     "class-validator": "^0.14.0",
     "dotenv": "^16.3.1",
     "graphql": "^16.7.1",
+    "husky": "^8.0.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
   },
