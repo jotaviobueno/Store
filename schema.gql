@@ -121,6 +121,7 @@ type Query {
   products(paginationOptions: PaginationOptionsInput!): [ProductSchema!]!
   product(productId: IdInput!): ProductSchema!
   cart(paginationOptions: PaginationOptionsInput!): [CartSchema!]!
+  findAllByUserId(userId: IdInput!, paginationOptions: PaginationOptionsInput!): [CartSchema!]!
 }
 
 input PaginationOptionsInput {
@@ -155,6 +156,7 @@ type Mutation {
   updateProduct(productId: IdInput!, updateProductInput: UpdateProductInput!): ProductSchema!
   removeProduct(productId: IdInput!): Boolean!
   createCart(createCartInput: CreateCartInput!): CartSchema!
+  updateCart(cartId: IdInput!, updateCartInput: UpdateCartInput!): Boolean!
   removeCart(cartId: IdInput!): Boolean!
 }
 
@@ -229,4 +231,8 @@ input UpdateProductInput {
 input CreateCartInput {
   quantity: Int!
   productId: String!
+}
+
+input UpdateCartInput {
+  quantity: Int!
 }

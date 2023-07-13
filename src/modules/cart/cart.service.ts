@@ -1,9 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateCartInput, PaginationOptionsInput } from '../../domain/dtos';
+import {
+  CreateCartInput,
+  PaginationOptionsInput,
+  UpdateCartInput,
+} from '../../domain/dtos';
 import { CartRepository } from './cart.repository';
 import { ProductService } from '../product/product.service';
-import { UpdateCartInput } from '../../domain/dtos/cart/update-cart.input';
 import { StockService } from '../stock/stock.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class CartService {
@@ -11,6 +15,7 @@ export class CartService {
     private readonly cartRepository: CartRepository,
     private readonly productService: ProductService,
     private readonly stockService: StockService,
+    private readonly userService: UserService,
   ) {}
 
   async create(userId: string, createCartInput: CreateCartInput) {
@@ -33,6 +38,15 @@ export class CartService {
 
   findAll(userId: string, paginationOptions: PaginationOptionsInput) {
     return this.cartRepository.findAll(userId, paginationOptions);
+  }
+
+  async findAllByUserId(
+    userId: string,
+    paginationOptions: PaginationOptionsInput,
+  ) {
+    const user = await this.userService.findOne(userId);
+
+    return this.cartRepository.findAll(user.id, paginationOptions);
   }
 
   async findOne(id: string) {

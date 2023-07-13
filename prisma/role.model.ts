@@ -25,6 +25,11 @@ export const roleModel = [
       /**/
       'CAN_CREATE_PRODUCT',
       'CAN_UPDATE_ANY_PRODUCT',
+      //
+      'CAN_CREATE_CART',
+      'CAN_READ_ANY_CART',
+      'CAN_DELETE_ANY_CART',
+      'CAN_DELETE_ANY_CART',
     ],
   },
   {
@@ -48,6 +53,11 @@ export const roleModel = [
       /**/
       'CAN_CREATE_PRODUCT',
       'CAN_UPDATE_ANY_PRODUCT',
+      //
+      'CAN_CREATE_CART',
+      'CAN_READ_ANY_CART',
+      'CAN_DELETE_ANY_CART',
+      'CAN_DELETE_ANY_CART',
     ],
   },
   {
@@ -71,6 +81,11 @@ export const roleModel = [
       /**/
       'CAN_CREATE_PRODUCT',
       'CAN_UPDATE_OWN_PRODUCT',
+      //
+      'CAN_CREATE_CART',
+      'CAN_READ_OWN_CART',
+      'CAN_DELETE_OWN_CART',
+      'CAN_DELETE_OWN_CART',
     ],
   },
 ];

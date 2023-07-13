@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateCartInput, PaginationOptionsInput } from '../../domain/dtos';
+import {
+  CreateCartInput,
+  PaginationOptionsInput,
+  UpdateCartInput,
+} from '../../domain/dtos';
 import { CartSchema } from '../../domain/schemas';
-import { UpdateCartInput } from '../../domain/dtos/cart/update-cart.input';
 
 @Injectable()
 export class CartRepository {

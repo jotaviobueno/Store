@@ -6,9 +6,18 @@ import { ProductModule } from '../product/product.module';
 import { AccessModule } from '../access/access.module';
 import { UserModule } from '../user/user.module';
 import { StockModule } from '../stock/stock.module';
+import { UserRoleModule } from '../user-role/user-role.module';
 
 @Module({
-  imports: [ProductModule, AccessModule, UserModule, StockModule],
+  imports: [
+    ProductModule,
+    AccessModule,
+    UserModule,
+    StockModule,
+    UserModule,
+    AccessModule,
+    UserRoleModule,
+  ],
   providers: [CartResolver, CartService, CartRepository],
   exports: [CartService],
 })
