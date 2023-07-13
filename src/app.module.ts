@@ -12,6 +12,9 @@ import { RoleModule } from './modules/role/role.module';
 import { UserRoleModule } from './modules/user-role/user-role.module';
 import { RolePermissionModule } from './modules/role-permission/role-permission.module';
 import { PermissionModule } from './modules/permission/permission.module';
+import { ProductModule } from './modules/product/product.module';
+import { CartModule } from './modules/cart/cart.module';
+import { StockModule } from './modules/stock/stock.module';
 import { LogModule } from './modules/log/log.module';
 
 @Module({
@@ -29,6 +32,9 @@ import { LogModule } from './modules/log/log.module';
     UserRoleModule,
     RolePermissionModule,
     PermissionModule,
+    ProductModule,
+    CartModule,
+    StockModule,
     LogModule,
   ],
 })

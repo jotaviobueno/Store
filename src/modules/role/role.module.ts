@@ -9,10 +9,10 @@ import { UserRoleModule } from '../user-role/user-role.module';
 
 @Module({
   imports: [
+    forwardRef(() => UserModule),
+    forwardRef(() => UserRoleModule),
     RolePermissionModule,
     AccessModule,
-    UserModule,
-    forwardRef(() => UserRoleModule),
   ],
   providers: [RoleResolver, RoleService, RoleRepository],
   exports: [RoleService],

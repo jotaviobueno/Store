@@ -40,9 +40,9 @@ export class UserRoleRepository {
 
   findAllUserRoleWithUserId(userId: string): Promise<
     (UserRoleSchema & {
-      Role: RoleSchema & {
+      role: RoleSchema & {
         rolePermission: (RolePermissionSchema & {
-          Permission: PermissionSchema;
+          permission: PermissionSchema;
         })[];
       };
     })[]
@@ -52,11 +52,11 @@ export class UserRoleRepository {
         userId,
       },
       include: {
-        Role: {
+        role: {
           include: {
             rolePermission: {
               include: {
-                Permission: true,
+                permission: true,
               },
             },
           },

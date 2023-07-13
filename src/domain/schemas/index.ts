@@ -9,4 +9,7 @@ export * from './role/index';
 export * from './user-role/index';
 export * from './role-permission/index';
 export * from './permission/index';
+export * from './product/index';
+export * from './cart/index';
+export * from './stock/index';
 export * from './log/index';
