@@ -20,26 +20,27 @@ model Access {
 }
 
 model User {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String     @map("first_name") @db.String
-  lastName  String     @map("last_name") @db.String
-  username  String     @db.String
-  email     String     @db.String
-  password  String     @db.String
-  country   String?    @db.String
-  city      String?    @db.String
-  state     String?    @db.String
-  avatarUrl String?    @map("avatar_url") @db.String
-  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp
-  updatedAt DateTime   @default(now()) @map("updated_at") @db.Timestamp
-  deletedAt DateTime?  @map("deleted_at") @db.Timestamp
-  access    Access[]
-  article   Article[]
-  category  Category[]
-  tag       Tag[]
-  userRole  UserRole[]
-  product   Product[]
-  Cart      Cart[]
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  firstName        String     @map("first_name") @db.String
+  lastName         String     @map("last_name") @db.String
+  username         String     @db.String
+  email            String     @db.String
+  password         String     @db.String
+  country          String?    @db.String
+  city             String?    @db.String
+  state            String?    @db.String
+  avatarUrl        String?    @map("avatar_url") @db.String
+  stripeCustomerId String     @map("stripe_customer_id") @db.String
+  createdAt        DateTime   @default(now()) @map("created_at") @db.Timestamp
+  updatedAt        DateTime   @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt        DateTime?  @map("deleted_at") @db.Timestamp
+  access           Access[]
+  article          Article[]
+  category         Category[]
+  tag              Tag[]
+  userRole         UserRole[]
+  product          Product[]
+  Cart             Cart[]
 }
 
 model Article {

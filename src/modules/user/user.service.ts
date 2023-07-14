@@ -6,10 +6,14 @@ import {
 } from 'src/domain/dtos';
 import { UserRepository } from './user.repository';
 import { hash } from 'src/domain/utils';
+import { StripeService } from '../stripe/stripe.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly stripeService: StripeService,
+  ) {}
 
   async create(createUserInput: CreateUserInput) {
     const usernameExist = await this.userRepository.findByUsername(
@@ -26,9 +30,15 @@ export class UserService {
     if (emailExist)
       throw new HttpException('Email already exists', HttpStatus.CONFLICT);
 
+    const { id } = await this.stripeService.createCustomer(
+      createUserInput.username,
+      createUserInput.email,
+    );
+
     const user = await this.userRepository.create({
       ...createUserInput,
       password: await hash(createUserInput.password),
+      stripeCustomerId: id,
     });
 
     return user;

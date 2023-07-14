@@ -16,6 +16,7 @@ import { ProductModule } from './modules/product/product.module';
 import { CartModule } from './modules/cart/cart.module';
 import { StockModule } from './modules/stock/stock.module';
 import { LogModule } from './modules/log/log.module';
+import { StripeModule } from './modules/stripe/stripe.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { LogModule } from './modules/log/log.module';
     CartModule,
     StockModule,
     LogModule,
+    StripeModule,
   ],
 })
 export class AppModule {}

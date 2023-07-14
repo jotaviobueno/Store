@@ -32,6 +32,8 @@ export class UserSchema implements User {
   @Field({ nullable: true })
   avatarUrl: string | null;
 
+  stripeCustomerId: string;
+
   @Field()
   createdAt: Date;
 
