@@ -1,35 +1,38 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateArticleTagInput } from 'src/domain/dtos';
-import { ArticleTagSchema } from 'src/domain/schemas';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateArticleTagInput } from "src/domain/dtos";
+import { ArticleTagSchema } from "src/domain/schemas";
 
 @Injectable()
 export class ArticleTagRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {
+  }
 
   create(
-    createArticleTagInput: CreateArticleTagInput,
+    createArticleTagInput: CreateArticleTagInput
   ): Promise<ArticleTagSchema> {
     return this.prismaService.articleTag.create({
       data: {
-        ...createArticleTagInput,
-      },
+        ...createArticleTagInput
+      }
     });
   }
 
-  findByArticleId(articleId: string): Promise<ArticleTagSchema[]> {
+  findByArticleId(articlesId: string[]): Promise<ArticleTagSchema[]> {
     return this.prismaService.articleTag.findMany({
       where: {
-        articleId,
-      },
+        articleId: {
+          in: articlesId
+        }
+      }
     });
   }
 
   findByTagId(tagId: string): Promise<ArticleTagSchema[]> {
     return this.prismaService.articleTag.findMany({
       where: {
-        tagId,
-      },
+        tagId
+      }
     });
   }
 }

@@ -28,10 +28,12 @@ export class StockRepository {
     });
   }
 
-  findAll(productId: string): Promise<StockSchema[]> {
+  findManyByProductId(productsId: string[]): Promise<StockSchema[]> {
     return this.prismaService.stock.findMany({
       where: {
-        productId,
+        productId: {
+          in: productsId,
+        },
       },
     });
   }

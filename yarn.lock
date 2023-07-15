@@ -972,14 +972,6 @@
     path-to-regexp "3.2.0"
     tslib "2.5.3"
 
-"@nestjs/devtools-integration@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@nestjs/devtools-integration/-/devtools-integration-0.1.5.tgz#373aebe93632dd0f1bc46b714c6720951f35f87b"
-  integrity sha512-iwxvfxa3kzOulG/Fje82Ww80OVsA8rzYR+UAEKrdGExRRGQRGQ0+bHfG0XLlPG3XIuM5J2MRMo7x1bN8ZIs9Gg==
-  dependencies:
-    chalk "^4.1.2"
-    node-fetch "^2.6.9"
-
 "@nestjs/graphql@11":
   version "11.0.6"
   resolved "https://registry.yarnpkg.com/@nestjs/graphql/-/graphql-11.0.6.tgz#df0c488a30e0add93deaaca038c9da005e648aed"
@@ -2343,6 +2335,11 @@ cssfilter@0.0.10:
   version "0.0.10"
   resolved "https://registry.npmjs.org/cssfilter/-/cssfilter-0.0.10.tgz"
   integrity sha512-FAaLDaplstoRsDR8XGYH51znUN0UY7nMc6Z9/fvE8EXGwvJE9hu7W2vHwx1+bd6gCYnln9nLbzxFTrcO9YQDZw==
+
+dataloader@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/dataloader/-/dataloader-2.2.2.tgz#216dc509b5abe39d43a9b9d97e6e5e473dfbe3e0"
+  integrity sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==
 
 debug@2.6.9:
   version "2.6.9"
@@ -4228,13 +4225,6 @@ node-fetch@^2.6.1, node-fetch@^2.6.7:
   version "2.6.11"
   resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.11.tgz"
   integrity sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==
-  dependencies:
-    whatwg-url "^5.0.0"
-
-node-fetch@^2.6.9:
-  version "2.6.12"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.12.tgz#02eb8e22074018e3d5a83016649d04df0e348fba"
-  integrity sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==
   dependencies:
     whatwg-url "^5.0.0"
 

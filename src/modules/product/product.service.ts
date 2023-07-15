@@ -101,8 +101,4 @@ export class ProductService {
   getStock(productId: string) {
     return this.stockService.getTotalStock(productId);
   }
-
-  getStockHistory(productId: string) {
-    return this.stockService.findAll(productId);
-  }
 }

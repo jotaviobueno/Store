@@ -12,8 +12,8 @@ export class StockService {
     return this.stockRepository.create(createStockInput);
   }
 
-  findAll(productId: string) {
-    return this.stockRepository.findAll(productId);
+  findManyByProductId(productId: string[]) {
+    return this.stockRepository.findManyByProductId(productId);
   }
 
   findAllTypeInput(productId: string) {

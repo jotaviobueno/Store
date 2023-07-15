@@ -21,10 +21,16 @@ import { AuthGuard } from '../access/guard/auth.guard';
 import { Permissions } from '../permission/decorator/permission.decorator';
 import { PERMISSION_ENUM } from '../../domain/enums';
 import { RoleGuard } from '../role/guards/role.guard';
+import { ProductLoader } from './product.dataloader';
+import { UserLoader } from '../user/user.dataloader';
 
 @Resolver(() => ProductSchema)
 export class ProductResolver {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly userLoader: UserLoader,
+    private readonly productLoader: ProductLoader,
+  ) {}
 
   @UseGuards(AuthGuard, RoleGuard)
   @Permissions(PERMISSION_ENUM.CAN_CREATE_PRODUCT)
@@ -71,12 +77,12 @@ export class ProductResolver {
     return this.productService.remove(id);
   }
 
-  @ResolveField(() => UserSchema)
+  @ResolveField(() => [UserSchema])
   productOwner(
     @Parent()
     { userId }: ProductSchema,
   ) {
-    return this.productService.getProductOwner(userId);
+    return this.userLoader.load(userId);
   }
 
   @ResolveField(() => Int)
@@ -92,6 +98,6 @@ export class ProductResolver {
     @Parent()
     { id }: ProductSchema,
   ) {
-    return this.productService.getStockHistory(id);
+    return this.productLoader.load(id);
   }
 }

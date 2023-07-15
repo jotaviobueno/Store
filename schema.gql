@@ -14,6 +14,7 @@ type UserSchema {
   avatarUrl: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  roles: [RoleSchema!]
 }
 
 """
@@ -37,7 +38,7 @@ type ArticleSchema {
   published: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
-  author: UserSchema!
+  author: [UserSchema!]!
   categories: [CategorySchema!]!
   tags: [TagSchema!]!
 }
@@ -47,7 +48,6 @@ type CategorySchema {
   name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-  articles: [ArticleSchema!]!
 }
 
 type TagSchema {
@@ -55,7 +55,6 @@ type TagSchema {
   name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-  articles: [ArticleSchema!]!
 }
 
 type RoleSchema {
@@ -85,7 +84,7 @@ type ProductSchema {
   price: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
-  productOwner: UserSchema!
+  productOwner: [UserSchema!]!
   totalStock: Int!
   stockHistory: [StockSchema!]!
 }
@@ -125,8 +124,8 @@ type Query {
 }
 
 input PaginationOptionsInput {
-  page: Float = 1
-  per_page: Float = 10
+  page: Int = 1
+  per_page: Int = 10
 }
 
 input IdInput {

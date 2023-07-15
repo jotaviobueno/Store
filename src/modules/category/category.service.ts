@@ -1,27 +1,15 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  forwardRef,
-} from '@nestjs/common';
-import {
-  CreateCategoryInput,
-  PaginationOptionsInput,
-  UpdateCategoryInput,
-} from 'src/domain/dtos';
-import { CategoryRepository } from './category.repository';
-import { ArticleCategoryService } from '../article-category/article-category.service';
-import { ArticleService } from '../article/article.service';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { CreateCategoryInput, PaginationOptionsInput, UpdateCategoryInput } from "src/domain/dtos";
+import { CategoryRepository } from "./category.repository";
+import { ArticleCategoryService } from "../article-category/article-category.service";
 
 @Injectable()
 export class CategoryService {
   constructor(
     private readonly categoryRepository: CategoryRepository,
-    private readonly articleCategoryService: ArticleCategoryService,
-    @Inject(forwardRef(() => ArticleService))
-    private readonly articleService: ArticleService,
-  ) {}
+    private readonly articleCategoryService: ArticleCategoryService
+  ) {
+  }
 
   async create({ articleId, ...createCategoryInput }: CreateCategoryInput) {
     const categories = await Promise.all(
@@ -31,16 +19,16 @@ export class CategoryService {
         if (tagExist) return tagExist;
 
         return this.categoryRepository.create(name, createCategoryInput);
-      }),
+      })
     );
 
     await Promise.all(
       categories.map(async (categories) => {
-        await this.articleCategoryService.create({
+        return this.articleCategoryService.create({
           categoryId: categories.id,
-          articleId,
+          articleId
         });
-      }),
+      })
     );
 
     return categories;
@@ -58,7 +46,7 @@ export class CategoryService {
     const category = await this.categoryRepository.findOne(id);
 
     if (!category)
-      throw new HttpException('category not found', HttpStatus.NOT_FOUND);
+      throw new HttpException("category not found", HttpStatus.NOT_FOUND);
 
     return category;
   }
@@ -68,13 +56,13 @@ export class CategoryService {
 
     const update = await this.categoryRepository.update(
       category.id,
-      updateCategoryInput,
+      updateCategoryInput
     );
 
     if (!update)
       throw new HttpException(
-        'Failed to update category',
-        HttpStatus.NOT_ACCEPTABLE,
+        "Failed to update category",
+        HttpStatus.NOT_ACCEPTABLE
       );
 
     return update;
@@ -87,20 +75,10 @@ export class CategoryService {
 
     if (!remove)
       throw new HttpException(
-        'Failed to remove category',
-        HttpStatus.NOT_ACCEPTABLE,
+        "Failed to remove category",
+        HttpStatus.NOT_ACCEPTABLE
       );
 
     return true;
-  }
-
-  async getArticlesByCategoryId(categoryId: string) {
-    const categories = await this.articleCategoryService.findByCategoryId(
-      categoryId,
-    );
-
-    return this.articleService.findMany(
-      categories.map((category) => category.articleId),
-    );
   }
 }

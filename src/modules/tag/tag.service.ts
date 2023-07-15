@@ -1,27 +1,15 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  forwardRef,
-} from '@nestjs/common';
-import {
-  CreateTagInput,
-  PaginationOptionsInput,
-  UpdateTagInput,
-} from 'src/domain/dtos';
-import { TagRepository } from './tag.repository';
-import { ArticleService } from '../article/article.service';
-import { ArticleTagService } from '../article-tag/article-tag.service';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { CreateTagInput, PaginationOptionsInput, UpdateTagInput } from "src/domain/dtos";
+import { TagRepository } from "./tag.repository";
+import { ArticleTagService } from "../article-tag/article-tag.service";
 
 @Injectable()
 export class TagService {
   constructor(
     private readonly tagRepository: TagRepository,
-    @Inject(forwardRef(() => ArticleService))
-    private readonly articleService: ArticleService,
-    private readonly articleTagService: ArticleTagService,
-  ) {}
+    private readonly articleTagService: ArticleTagService
+  ) {
+  }
 
   async create({ articleId, ...createTagInput }: CreateTagInput) {
     const tags = await Promise.all(
@@ -31,13 +19,13 @@ export class TagService {
         if (tagExist) return tagExist;
 
         return this.tagRepository.create(name, createTagInput);
-      }),
+      })
     );
 
     await Promise.all(
       tags.map(async (tag) => {
-        await this.articleTagService.create({ tagId: tag.id, articleId });
-      }),
+        return this.articleTagService.create({ tagId: tag.id, articleId });
+      })
     );
 
     return tags;
@@ -50,7 +38,7 @@ export class TagService {
   async findOne(id: string) {
     const tag = await this.tagRepository.findOne(id);
 
-    if (!tag) throw new HttpException('Tag not found', HttpStatus.NOT_FOUND);
+    if (!tag) throw new HttpException("Tag not found", HttpStatus.NOT_FOUND);
 
     return tag;
   }
@@ -66,8 +54,8 @@ export class TagService {
 
     if (!update)
       throw new HttpException(
-        'Failed to update this tag',
-        HttpStatus.NOT_ACCEPTABLE,
+        "Failed to update this tag",
+        HttpStatus.NOT_ACCEPTABLE
       );
 
     return update;
@@ -80,16 +68,11 @@ export class TagService {
 
     if (!remove)
       throw new HttpException(
-        'Failed to delete this tag',
-        HttpStatus.NOT_ACCEPTABLE,
+        "Failed to delete this tag",
+        HttpStatus.NOT_ACCEPTABLE
       );
 
     return true;
   }
 
-  async getArticlesByTagId(tagId: string) {
-    const tags = await this.articleTagService.findByTagId(tagId);
-
-    return this.articleService.findMany(tags.map((tag) => tag.articleId));
-  }
 }
