@@ -1,9 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { CreateArticleInput, PaginationOptionsInput, SearchArticleInput, UpdateArticleInput } from "src/domain/dtos";
-import { ArticleRepository } from "./article.repository";
-import { UserService } from "../user/user.service";
-import { TagService } from "../tag/tag.service";
-import { CategoryService } from "../category/category.service";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  CreateArticleInput,
+  PaginationOptionsInput,
+  SearchArticleInput,
+  UpdateArticleInput,
+} from 'src/domain/dtos';
+import { ArticleRepository } from './article.repository';
+import { UserService } from '../user/user.service';
+import { TagService } from '../tag/tag.service';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class ArticleService {
@@ -11,28 +16,27 @@ export class ArticleService {
     private readonly articleRepository: ArticleRepository,
     private readonly userService: UserService,
     private readonly tagService: TagService,
-    private readonly categoryService: CategoryService
-  ) {
-  }
+    private readonly categoryService: CategoryService,
+  ) {}
 
   async create(
     userId: string,
-    { categories, tags, ...createArticleInput }: CreateArticleInput
+    { categories, tags, ...createArticleInput }: CreateArticleInput,
   ) {
     const article = await this.articleRepository.create(userId, {
-      ...createArticleInput
+      ...createArticleInput,
     });
 
     await this.tagService.create({
       userId,
       articleId: article.id,
-      name: tags
+      name: tags,
     });
 
     await this.categoryService.create({
       userId,
       articleId: article.id,
-      name: categories
+      name: categories,
     });
 
     return article;
@@ -40,11 +44,11 @@ export class ArticleService {
 
   findAll(
     paginationOptions: PaginationOptionsInput,
-    searchArticleInput: SearchArticleInput
+    searchArticleInput: SearchArticleInput,
   ) {
     return this.articleRepository.findAll(
       paginationOptions,
-      searchArticleInput
+      searchArticleInput,
     );
   }
 
@@ -52,7 +56,7 @@ export class ArticleService {
     const article = await this.articleRepository.findOne(id);
 
     if (!article)
-      throw new HttpException("Article not found", HttpStatus.NOT_FOUND);
+      throw new HttpException('Article not found', HttpStatus.NOT_FOUND);
 
     return article;
   }
@@ -66,13 +70,13 @@ export class ArticleService {
 
     const update = await this.articleRepository.update(
       article.id,
-      updateArticleInput
+      updateArticleInput,
     );
 
     if (!update)
       throw new HttpException(
-        "Failed to update this article",
-        HttpStatus.NOT_ACCEPTABLE
+        'Failed to update this article',
+        HttpStatus.NOT_ACCEPTABLE,
       );
 
     return update;
@@ -85,8 +89,8 @@ export class ArticleService {
 
     if (!remove)
       throw new HttpException(
-        "Failed to remove this article",
-        HttpStatus.NOT_ACCEPTABLE
+        'Failed to remove this article',
+        HttpStatus.NOT_ACCEPTABLE,
       );
 
     return true;

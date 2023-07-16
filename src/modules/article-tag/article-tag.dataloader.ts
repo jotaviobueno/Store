@@ -14,22 +14,21 @@ export class ArticleTagLoader {
     private readonly tagService: TagService
   ) {
     this.dataLoader = new DataLoader<string, TagSchema[]>(
-      (keys) => this.batchArticleCategory([...keys]),
+      (keys) => this.batchArticleTag([...keys]),
       {
         cache: true
       }
     );
   }
 
-  private async batchArticleCategory(
+  private async batchArticleTag(
     articlesIds: string[]
   ): Promise<TagSchema[][]> {
-    const articlesTags =
-      await this.articleTagService.findManyByArticleId(articlesIds);
-
-    const tagIds = articlesTags.map(
-      (articleCategory) => articleCategory.tagId
+    const articlesTags = await this.articleTagService.findManyByArticleId(
+      articlesIds
     );
+
+    const tagIds = articlesTags.map((articleTag) => articleTag.tagId);
 
     const tags = await this.tagService.findMany(tagIds);
 

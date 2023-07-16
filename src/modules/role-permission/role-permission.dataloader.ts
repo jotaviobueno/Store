@@ -14,18 +14,19 @@ export class RolePermissionLoader {
     private readonly permissionService: PermissionService
   ) {
     this.dataLoader = new DataLoader<string, PermissionSchema[]>(
-      (keys) => this.batchArticleCategory([...keys]),
+      (keys) => this.batchRolePermission([...keys]),
       {
         cache: true
       }
     );
   }
 
-  private async batchArticleCategory(
+  private async batchRolePermission(
     rolesIds: string[]
   ): Promise<PermissionSchema[][]> {
-    const rolesPermissions =
-      await this.rolePermissionService.findManyByRoleId(rolesIds);
+    const rolesPermissions = await this.rolePermissionService.findManyByRoleId(
+      rolesIds
+    );
 
     const permissionIds = rolesPermissions.map(
       (rolePermission) => rolePermission.permissionId
