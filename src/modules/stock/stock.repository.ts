@@ -48,6 +48,20 @@ export class StockRepository {
     });
   }
 
+  findManyTypeInput(productsIds: string[]): Promise<StockSchema[]> {
+    return this.prismaService.stock.findMany({
+      where: {
+        type: STOCK_ENUM.INPUT,
+        productId: {
+          in: productsIds,
+        },
+        stock: {
+          gte: 0,
+        },
+      },
+    });
+  }
+
   update(id: string, stock: number): Promise<StockSchema> {
     return this.prismaService.stock.update({
       where: {

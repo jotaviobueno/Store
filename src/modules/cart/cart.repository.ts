@@ -38,6 +38,16 @@ export class CartRepository {
     });
   }
 
+  findMany(cartsIds: string[]): Promise<CartSchema[]> {
+    return this.prismaService.cart.findMany({
+      where: {
+        id: {
+          in: cartsIds,
+        },
+      },
+    });
+  }
+
   findById(id: string): Promise<CartSchema> {
     return this.prismaService.cart.findFirst({
       where: {

@@ -18,8 +18,6 @@ import { ArticleTagService } from '../article-tag/article-tag.service';
 export class TagService {
   constructor(
     private readonly tagRepository: TagRepository,
-    @Inject(forwardRef(() => ArticleService))
-    private readonly articleService: ArticleService,
     private readonly articleTagService: ArticleTagService,
   ) {}
 
@@ -85,11 +83,5 @@ export class TagService {
       );
 
     return true;
-  }
-
-  async getArticlesByTagId(tagId: string) {
-    const tags = await this.articleTagService.findByTagId(tagId);
-
-    return this.articleService.findMany(tags.map((tag) => tag.articleId));
   }
 }

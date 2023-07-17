@@ -55,12 +55,4 @@ export class TagResolver {
   removeTag(@Args('tagId') { id }: IdInput) {
     return this.tagService.remove(id);
   }
-
-  @ResolveField(() => [ArticleSchema])
-  articles(
-    @Parent()
-    { id: tagId }: TagSchema,
-  ) {
-    return this.tagService.getArticlesByTagId(tagId);
-  }
 }

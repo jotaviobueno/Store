@@ -18,6 +18,11 @@ export class ProductSchema implements Product {
   @Field(() => Float)
   price: number;
 
+  priceId: string | null;
+
+  @Field(() => Boolean)
+  active: boolean;
+
   userId: string;
 
   @Field(() => Date)

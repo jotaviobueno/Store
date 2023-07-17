@@ -12,15 +12,12 @@ import {
 } from 'src/domain/dtos';
 import { CategoryRepository } from './category.repository';
 import { ArticleCategoryService } from '../article-category/article-category.service';
-import { ArticleService } from '../article/article.service';
 
 @Injectable()
 export class CategoryService {
   constructor(
     private readonly categoryRepository: CategoryRepository,
     private readonly articleCategoryService: ArticleCategoryService,
-    @Inject(forwardRef(() => ArticleService))
-    private readonly articleService: ArticleService,
   ) {}
 
   async create({ articleId, ...createCategoryInput }: CreateCategoryInput) {
@@ -92,15 +89,5 @@ export class CategoryService {
       );
 
     return true;
-  }
-
-  async getArticlesByCategoryId(categoryId: string) {
-    const categories = await this.articleCategoryService.findByCategoryId(
-      categoryId,
-    );
-
-    return this.articleService.findMany(
-      categories.map((category) => category.articleId),
-    );
   }
 }

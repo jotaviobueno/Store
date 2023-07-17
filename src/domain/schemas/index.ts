@@ -13,3 +13,5 @@ export * from './product/index';
 export * from './cart/index';
 export * from './stock/index';
 export * from './log/index';
+export * from './stripe/index';
+export * from './order/index';

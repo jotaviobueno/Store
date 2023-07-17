@@ -16,8 +16,6 @@ export class ArticleRepository {
     userId: string,
     createArticleInput: CreateArticleInput,
   ): Promise<ArticleSchema> {
-    console.log(createArticleInput);
-
     return this.prismaService.article.create({
       data: {
         ...createArticleInput,
@@ -64,7 +62,6 @@ export class ArticleRepository {
     });
   }
 
-  // TODO: Criar uma validação para caso seja o todo do article mesmo sendo published: false listar para ele
   findOne(id: string): Promise<ArticleSchema> {
     return this.prismaService.article.findFirst({
       where: {

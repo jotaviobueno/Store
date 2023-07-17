@@ -14,10 +14,10 @@ import { PERMISSION_ENUM } from 'src/domain/enums';
 import { Permissions } from '../permission/decorator/permission.decorator';
 
 @Resolver(() => CartSchema)
-@UseGuards(AuthGuard, RoleGuard)
 export class CartResolver {
   constructor(private readonly cartService: CartService) {}
 
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(PERMISSION_ENUM.CAN_CREATE_CART)
   @Mutation(() => CartSchema)
   createCart(
@@ -27,6 +27,7 @@ export class CartResolver {
     return this.cartService.create(userId, createCartInput);
   }
 
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(
     PERMISSION_ENUM.CAN_READ_OWN_CART,
     PERMISSION_ENUM.CAN_READ_ANY_CART,
@@ -39,6 +40,7 @@ export class CartResolver {
     return this.cartService.findAll(userId, paginationOptionsInput);
   }
 
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(PERMISSION_ENUM.CAN_READ_ANY_CART)
   @Query(() => [CartSchema])
   findAllByUserId(
@@ -48,6 +50,7 @@ export class CartResolver {
     return this.cartService.findAll(id, paginationOptionsInput);
   }
 
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(
     PERMISSION_ENUM.CAN_DELETE_ANY_CART,
     PERMISSION_ENUM.CAN_DELETE_OWN_CART,
@@ -60,6 +63,7 @@ export class CartResolver {
     return this.cartService.update(id, updateCartInput);
   }
 
+  @UseGuards(AuthGuard, RoleGuard)
   @Permissions(
     PERMISSION_ENUM.CAN_DELETE_ANY_CART,
     PERMISSION_ENUM.CAN_DELETE_OWN_CART,

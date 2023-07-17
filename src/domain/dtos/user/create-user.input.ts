@@ -27,6 +27,4 @@ export class CreateUserInput {
   @IsString()
   @IsNotEmpty()
   password: string;
-
-  stripeCustomerId: string;
 }

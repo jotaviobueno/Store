@@ -57,12 +57,4 @@ export class CategoryResolver {
   removeCategory(@Args('categoryId') { id }: IdInput) {
     return this.categoryService.remove(id);
   }
-
-  @ResolveField(() => [ArticleSchema])
-  articles(
-    @Parent()
-    { id: categoryId }: CategorySchema,
-  ) {
-    return this.categoryService.getArticlesByCategoryId(categoryId);
-  }
 }

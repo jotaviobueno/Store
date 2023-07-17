@@ -17,8 +17,8 @@ export class ProductRepository {
   ): Promise<ProductSchema> {
     return this.prismaService.product.create({
       data: {
-        userId,
         ...createProductInput,
+        userId,
         deletedAt: null,
       },
     });
@@ -42,6 +42,16 @@ export class ProductRepository {
       where: {
         id,
         deletedAt: null,
+      },
+    });
+  }
+
+  findMany(productsIds: string[]): Promise<ProductSchema[]> {
+    return this.prismaService.product.findMany({
+      where: {
+        id: {
+          in: productsIds,
+        },
       },
     });
   }

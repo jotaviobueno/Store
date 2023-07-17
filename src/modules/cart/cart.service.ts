@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import {
   CreateCartInput,
   PaginationOptionsInput,
@@ -38,6 +44,10 @@ export class CartService {
 
   findAll(userId: string, paginationOptions: PaginationOptionsInput) {
     return this.cartRepository.findAll(userId, paginationOptions);
+  }
+
+  findMany(cartsIds: string[]) {
+    return this.cartRepository.findMany(cartsIds);
   }
 
   async findAllByUserId(

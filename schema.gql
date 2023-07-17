@@ -47,7 +47,6 @@ type CategorySchema {
   name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-  articles: [ArticleSchema!]!
 }
 
 type TagSchema {
@@ -55,7 +54,6 @@ type TagSchema {
   name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-  articles: [ArticleSchema!]!
 }
 
 type RoleSchema {
@@ -83,6 +81,7 @@ type ProductSchema {
   description: String!
   imagesUrl: [String!]
   price: Float!
+  active: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
   productOwner: UserSchema!
@@ -103,6 +102,57 @@ type StockSchema {
   stock: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type OrderSchema {
+  id: String!
+  status: ORDER_ENUM
+  totalPrice: Int
+  quantity: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum ORDER_ENUM {
+  charge
+  payment
+  payment_failure_refund
+  payment_refund
+  refund
+  refund_failure
+  adjustment
+  anticipation_repayment
+  balance_transfer_inbound
+  balance_transfer_outbound
+  contribution
+  payout
+  payout_cancel
+  payout_failure
+  reserved_funds
+  stripe_fee
+  stripe_fx_fee
+  tax_fee
+  topup
+  topup_reversal
+  issuing_authorization_hold
+  issuing_authorization_release
+  issuing_disbursement
+  issuing_dispute
+  issuing_transaction
+  issuing_transfer_inbound
+  issuing_transfer_outbound
+  issuing_transfer_reversal_inbound
+  issuing_transfer_reversal_outbound
+  advance
+  advance_funding
+  application_fee
+  application_fee_refund
+  connect_collection_transfer
+  reserve_transaction
+  transfer
+  transfer_cancel
+  transfer_failure
+  transfer_refund
 }
 
 type Query {
@@ -158,6 +208,7 @@ type Mutation {
   createCart(createCartInput: CreateCartInput!): CartSchema!
   updateCart(cartId: IdInput!, updateCartInput: UpdateCartInput!): Boolean!
   removeCart(cartId: IdInput!): Boolean!
+  createOrder(createOrderInput: CreateOrderInput!): OrderSchema!
 }
 
 input CreateUserInput {
@@ -235,4 +286,8 @@ input CreateCartInput {
 
 input UpdateCartInput {
   quantity: Int!
+}
+
+input CreateOrderInput {
+  cartId: [String!]!
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CartResolver } from './cart.resolver';
 import { CartRepository } from './cart.repository';
@@ -10,11 +10,10 @@ import { UserRoleModule } from '../user-role/user-role.module';
 
 @Module({
   imports: [
-    ProductModule,
+    forwardRef(() => ProductModule),
     AccessModule,
     UserModule,
     StockModule,
-    UserModule,
     AccessModule,
     UserRoleModule,
   ],

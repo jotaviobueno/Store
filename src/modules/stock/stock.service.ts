@@ -29,6 +29,15 @@ export class StockService {
     );
   }
 
+  async getManyTotalStock(productsIds: string[]): Promise<number> {
+    const stocks = await this.stockRepository.findManyTypeInput(productsIds);
+
+    return stocks.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.stock,
+      0,
+    );
+  }
+
   async remove(productId: string, newStock: number) {
     const stocks = await this.findAllTypeInput(productId);
 

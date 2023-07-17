@@ -9,23 +9,26 @@ import { join } from 'path';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: true,
-      autoSchemaFile: join(process.cwd(), './schema.gql'),
+      autoSchemaFile: join(process.cwd(), 'schema.gql'),
       fieldResolverEnhancers: ['guards'],
+      // debug: true,
+      introspection: process.env.NODE_ENV !== 'production',
       formatError: (error: GraphQLError) => ({
-        statusCode: (error.extensions?.exception as any)?.status,
+        statusCode: (error.extensions as any)?.originalError?.statusCode,
         message:
-          (error.extensions?.exception as any)?.response?.message ||
-          (error?.extensions?.exception as any)?.stacktrace?.[0] ||
+          (error.extensions as any)?.originalError?.message ||
+          (error?.extensions as any)?.stacktrace[0] ||
           (error.extensions?.response as any)?.message ||
           error?.message ||
           '-',
-        error: (error.extensions?.exception as any)?.response?.error,
-        code:
-          (error.extensions?.exception as any)?.response?.code ||
-          error.extensions?.code ||
-          '-',
-        meta: (error.extensions?.exception as any)?.response?.meta,
+        error: (error.extensions as any)?.originalError?.error,
+        code: error.extensions?.code || '-',
+        meta: (error.extensions as any)?.response?.meta,
+        path: error.path,
       }),
+      resolvers: {
+        // BigInt,
+      },
       context: ({ req, res }) => ({ req, res, headers: req.headers }),
     }),
   ],

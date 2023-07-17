@@ -20,27 +20,28 @@ model Access {
 }
 
 model User {
-  id               String     @id @default(auto()) @map("_id") @db.ObjectId
-  firstName        String     @map("first_name") @db.String
-  lastName         String     @map("last_name") @db.String
-  username         String     @db.String
-  email            String     @db.String
-  password         String     @db.String
-  country          String?    @db.String
-  city             String?    @db.String
-  state            String?    @db.String
-  avatarUrl        String?    @map("avatar_url") @db.String
-  stripeCustomerId String     @map("stripe_customer_id") @db.String
-  createdAt        DateTime   @default(now()) @map("created_at") @db.Timestamp
-  updatedAt        DateTime   @default(now()) @map("updated_at") @db.Timestamp
-  deletedAt        DateTime?  @map("deleted_at") @db.Timestamp
-  access           Access[]
-  article          Article[]
-  category         Category[]
-  tag              Tag[]
-  userRole         UserRole[]
-  product          Product[]
-  Cart             Cart[]
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  firstName  String     @map("first_name") @db.String
+  lastName   String     @map("last_name") @db.String
+  username   String     @db.String
+  email      String     @db.String
+  password   String     @db.String
+  country    String?    @db.String
+  city       String?    @db.String
+  state      String?    @db.String
+  avatarUrl  String?    @map("avatar_url") @db.String
+  customerId String?    @map("customer_id") @db.String
+  createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamp
+  updatedAt  DateTime   @default(now()) @map("updated_at") @db.Timestamp
+  deletedAt  DateTime?  @map("deleted_at") @db.Timestamp
+  access     Access[]
+  article    Article[]
+  category   Category[]
+  tag        Tag[]
+  userRole   UserRole[]
+  product    Product[]
+  Cart       Cart[]
+  Order      Order[]
 }
 
 model Article {
@@ -134,7 +135,9 @@ model Product {
   name        String    @db.String
   description String    @db.String
   imagesUrl   String[]  @default([]) @map("images_url") @db.String
+  active      Boolean   @default(true)
   price       Float     @db.Double
+  priceId     String?   @map("price_id") @db.String
   user        User      @relation(fields: [userId], references: [id])
   userId      String    @map("user_id") @db.ObjectId
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp
@@ -142,6 +145,7 @@ model Product {
   deletedAt   DateTime? @map("deleted_at") @db.Timestamp
   cart        Cart[]
   Stock       Stock[]
+  Order       Order[]
 }
 
 model Stock {
@@ -174,4 +178,18 @@ model Log {
   oldValue  Json?    @map("old_value")
   newValue  Json     @map("new_value")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+}
+
+model Order {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  stripeId    String?  @map("stripe_id")
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @map("user_id") @db.ObjectId
+  product     Product  @relation(fields: [productsIds], references: [id])
+  productsIds String[] @map("product_id") @db.ObjectId
+  status      String?
+  totalPrice  Int?     @map("total_price") @db.Int
+  quantity    Int?     @db.Int
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamp
 }

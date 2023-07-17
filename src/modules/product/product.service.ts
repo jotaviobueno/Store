@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { ProductRepository } from './product.repository';
 import {
   CreateProductInput,
@@ -8,6 +14,7 @@ import {
 import { UserService } from '../user/user.service';
 import { StockService } from '../stock/stock.service';
 import { STOCK_ENUM } from 'src/domain/enums';
+import { StripeService } from '../stripe/stripe.service';
 
 @Injectable()
 export class ProductService {
@@ -15,8 +22,10 @@ export class ProductService {
     private readonly productRepository: ProductRepository,
     private readonly userService: UserService,
     private readonly stockService: StockService,
+    private readonly stripeService: StripeService,
   ) {}
 
+  // TODO: Arrumar isso, tentar deixar a criação do produto por ultimo
   async create(
     userId: string,
     { stock, ...createProductInput }: CreateProductInput,
@@ -25,6 +34,22 @@ export class ProductService {
       userId,
       createProductInput,
     );
+
+    const stripeProduct = await this.stripeService.createProduct(
+      {
+        stock,
+        ...createProductInput,
+      },
+      product.id,
+    );
+
+    // TODO: PREÇO ESTÁ SENDO CADASTRADO ERRADO NA STRIPE E NO BANCO
+    const price = await this.stripeService.createPrice(
+      createProductInput.price,
+      stripeProduct.id,
+    );
+
+    await this.productRepository.update(product.id, { priceId: price.id });
 
     await this.stockService.create({
       productId: product.id,
@@ -46,6 +71,10 @@ export class ProductService {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
 
     return product;
+  }
+
+  findMany(productsIds: string[]) {
+    return this.productRepository.findMany(productsIds);
   }
 
   async update(

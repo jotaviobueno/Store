@@ -26,7 +26,7 @@ import { RoleGuard } from '../role/guards/role.guard';
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(AuthGuard)
   @Permissions(PERMISSION_ENUM.CAN_CREATE_PRODUCT)
   @Mutation(() => ProductSchema)
   createProduct(
