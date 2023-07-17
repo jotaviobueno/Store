@@ -1,6 +1,14 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { UserSchema } from 'src/domain/schemas';
+import { RoleSchema, UserSchema } from 'src/domain/schemas';
 import {
   CreateUserInput,
   IdInput,
@@ -12,10 +20,14 @@ import { AuthGuard } from '../access/guard/auth.guard';
 import { Permissions } from '../permission/decorator/permission.decorator';
 import { PERMISSION_ENUM } from '../../domain/enums';
 import { RoleGuard } from '../role/guards/role.guard';
+import { UserRoleDataloader } from '../user-role/user-role.dataloader';
 
 @Resolver(() => UserSchema)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userRoleDataloader: UserRoleDataloader,
+  ) {}
 
   @Mutation(() => UserSchema)
   createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
@@ -61,5 +73,13 @@ export class UserResolver {
   @Mutation(() => Boolean)
   removeUser(@Args('userId') { id }: IdInput) {
     return this.userService.remove(id);
+  }
+
+  @ResolveField(() => [RoleSchema], { nullable: true })
+  roles(
+    @Parent()
+    { id }: UserSchema,
+  ) {
+    return this.userRoleDataloader.load(id);
   }
 }

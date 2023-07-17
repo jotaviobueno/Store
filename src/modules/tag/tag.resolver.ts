@@ -1,13 +1,6 @@
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { TagService } from './tag.service';
-import { ArticleSchema, TagSchema } from 'src/domain/schemas';
+import { TagSchema } from 'src/domain/schemas';
 import {
   IdInput,
   PaginationOptionsInput,
@@ -54,13 +47,5 @@ export class TagResolver {
   @Mutation(() => Boolean)
   removeTag(@Args('tagId') { id }: IdInput) {
     return this.tagService.remove(id);
-  }
-
-  @ResolveField(() => [ArticleSchema])
-  articles(
-    @Parent()
-    { id: tagId }: TagSchema,
-  ) {
-    return this.tagService.getArticlesByTagId(tagId);
   }
 }

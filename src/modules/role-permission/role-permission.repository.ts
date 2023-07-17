@@ -13,4 +13,14 @@ export class RolePermissionRepository {
       },
     });
   }
+
+  findManyByRoleId(rolesIds: string[]): Promise<RolePermissionSchema[]> {
+    return this.prismaService.rolePermission.findMany({
+      where: {
+        roleId: {
+          in: rolesIds,
+        },
+      },
+    });
+  }
 }

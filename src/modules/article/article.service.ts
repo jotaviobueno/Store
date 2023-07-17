@@ -9,8 +9,6 @@ import { ArticleRepository } from './article.repository';
 import { UserService } from '../user/user.service';
 import { TagService } from '../tag/tag.service';
 import { CategoryService } from '../category/category.service';
-import { ArticleTagService } from '../article-tag/article-tag.service';
-import { ArticleCategoryService } from '../article-category/article-category.service';
 
 @Injectable()
 export class ArticleService {
@@ -19,8 +17,6 @@ export class ArticleService {
     private readonly userService: UserService,
     private readonly tagService: TagService,
     private readonly categoryService: CategoryService,
-    private readonly articleCategoryService: ArticleCategoryService,
-    private readonly articleTagService: ArticleTagService,
   ) {}
 
   async create(
@@ -98,25 +94,5 @@ export class ArticleService {
       );
 
     return true;
-  }
-
-  getAuthor(userId: string) {
-    return this.userService.findOne(userId);
-  }
-
-  async getCategory(articleId: string) {
-    const categories = await this.articleCategoryService.findByArticleId(
-      articleId,
-    );
-
-    return this.categoryService.findMany(
-      categories.map((category) => category.categoryId),
-    );
-  }
-
-  async getTag(articleId: string) {
-    const tags = await this.articleTagService.findByArticleId(articleId);
-
-    return this.tagService.findMany(tags.map((tag) => tag.tagId));
   }
 }

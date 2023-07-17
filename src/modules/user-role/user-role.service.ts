@@ -56,4 +56,8 @@ export class UserRoleService {
   findAllUserRoleWithUserId(userId: string) {
     return this.userRoleRepository.findAllUserRoleWithUserId(userId);
   }
+
+  findManyByUsersId(usersId: string[]) {
+    return this.userRoleRepository.findManyByUsersId(usersId);
+  }
 }

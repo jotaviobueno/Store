@@ -16,8 +16,6 @@ export class ArticleRepository {
     userId: string,
     createArticleInput: CreateArticleInput,
   ): Promise<ArticleSchema> {
-    console.log(createArticleInput);
-
     return this.prismaService.article.create({
       data: {
         ...createArticleInput,

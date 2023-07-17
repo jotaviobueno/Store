@@ -1,13 +1,6 @@
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CategoryService } from './category.service';
-import { ArticleSchema, CategorySchema } from 'src/domain/schemas';
+import { CategorySchema } from 'src/domain/schemas';
 import {
   IdInput,
   PaginationOptionsInput,
@@ -56,13 +49,5 @@ export class CategoryResolver {
   @Mutation(() => Boolean)
   removeCategory(@Args('categoryId') { id }: IdInput) {
     return this.categoryService.remove(id);
-  }
-
-  @ResolveField(() => [ArticleSchema])
-  articles(
-    @Parent()
-    { id: categoryId }: CategorySchema,
-  ) {
-    return this.categoryService.getArticlesByCategoryId(categoryId);
   }
 }

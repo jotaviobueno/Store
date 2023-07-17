@@ -9,15 +9,7 @@ export class RolePermissionService {
     private readonly permissionService: PermissionService,
   ) {}
 
-  async handle(roleId: string) {
-    const rolePermissions = await this.findByRoleId(roleId);
-
-    return this.permissionService.findMany(
-      rolePermissions.map((rolePermission) => rolePermission.permissionId),
-    );
-  }
-
-  private findByRoleId(roleId: string) {
-    return this.rolePermissionRepository.findByRoleId(roleId);
+  findManyByRoleId(rolesIds: string[]) {
+    return this.rolePermissionRepository.findManyByRoleId(rolesIds);
   }
 }

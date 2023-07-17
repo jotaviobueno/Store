@@ -26,10 +26,18 @@ import { UseGuards } from '@nestjs/common';
 import { PERMISSION_ENUM } from '../../domain/enums';
 import { Permissions } from '../permission/decorator/permission.decorator';
 import { RoleGuard } from '../role/guards/role.guard';
+import { UserLoader } from '../user/user.dataloader';
+import { ArticleCategoryLoader } from '../article-category/article-category.dataloader';
+import { ArticleTagLoader } from '../article-tag/article-tag.dataloader';
 
 @Resolver(() => ArticleSchema)
 export class ArticleResolver {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    private readonly userLoader: UserLoader,
+    private readonly articleCategoryLoader: ArticleCategoryLoader,
+    private readonly articleTagLoader: ArticleTagLoader,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Permissions(PERMISSION_ENUM.CAN_CREATE_ARTICLE)
@@ -78,12 +86,12 @@ export class ArticleResolver {
     return this.articleService.remove(id);
   }
 
-  @ResolveField(() => UserSchema)
+  @ResolveField(() => [UserSchema])
   author(
     @Parent()
     { userId }: ArticleSchema,
   ) {
-    return this.articleService.getAuthor(userId);
+    return this.userLoader.load(userId);
   }
 
   @ResolveField(() => [CategorySchema])
@@ -91,7 +99,7 @@ export class ArticleResolver {
     @Parent()
     { id: articleId }: ArticleSchema,
   ) {
-    return this.articleService.getCategory(articleId);
+    return this.articleCategoryLoader.load(articleId);
   }
 
   @ResolveField(() => [TagSchema])
@@ -99,6 +107,6 @@ export class ArticleResolver {
     @Parent()
     { id: articleId }: ArticleSchema,
   ) {
-    return this.articleService.getTag(articleId);
+    return this.articleTagLoader.load(articleId);
   }
 }

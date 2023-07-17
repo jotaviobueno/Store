@@ -1,11 +1,11 @@
 import {
-  Resolver,
-  Query,
-  Mutation,
   Args,
   Context,
-  ResolveField,
+  Mutation,
   Parent,
+  Query,
+  ResolveField,
+  Resolver,
 } from '@nestjs/graphql';
 import { AccessService } from './access.service';
 import { AccessSchema, UserSchema } from 'src/domain/schemas';
@@ -16,10 +16,14 @@ import {
 } from 'src/domain/dtos';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from './guard/auth.guard';
+import { UserLoader } from '../user/user.dataloader';
 
 @Resolver(() => AccessSchema)
 export class AccessResolver {
-  constructor(private readonly accessService: AccessService) {}
+  constructor(
+    private readonly accessService: AccessService,
+    private readonly userLoader: UserLoader,
+  ) {}
 
   @Mutation(() => String)
   createAccess(
@@ -56,6 +60,6 @@ export class AccessResolver {
     @Parent()
     { userId }: AccessSchema,
   ) {
-    return this.accessService.getUser(userId);
+    return this.userLoader.load(userId);
   }
 }

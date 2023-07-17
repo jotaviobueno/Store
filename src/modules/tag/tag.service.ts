@@ -1,25 +1,16 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  forwardRef,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   CreateTagInput,
   PaginationOptionsInput,
   UpdateTagInput,
 } from 'src/domain/dtos';
 import { TagRepository } from './tag.repository';
-import { ArticleService } from '../article/article.service';
 import { ArticleTagService } from '../article-tag/article-tag.service';
 
 @Injectable()
 export class TagService {
   constructor(
     private readonly tagRepository: TagRepository,
-    @Inject(forwardRef(() => ArticleService))
-    private readonly articleService: ArticleService,
     private readonly articleTagService: ArticleTagService,
   ) {}
 
@@ -36,7 +27,7 @@ export class TagService {
 
     await Promise.all(
       tags.map(async (tag) => {
-        await this.articleTagService.create({ tagId: tag.id, articleId });
+        return this.articleTagService.create({ tagId: tag.id, articleId });
       }),
     );
 
@@ -85,11 +76,5 @@ export class TagService {
       );
 
     return true;
-  }
-
-  async getArticlesByTagId(tagId: string) {
-    const tags = await this.articleTagService.findByTagId(tagId);
-
-    return this.articleService.findMany(tags.map((tag) => tag.articleId));
   }
 }

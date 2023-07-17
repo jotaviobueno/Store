@@ -38,6 +38,10 @@ export class UserService {
     return this.userRepository.findAll(paginationOptions);
   }
 
+  findMany(userIds: string[]) {
+    return this.userRepository.findMany(userIds);
+  }
+
   async findOne(id: string) {
     const user = await this.userRepository.findOne(id);
 

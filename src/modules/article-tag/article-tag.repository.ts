@@ -17,10 +17,12 @@ export class ArticleTagRepository {
     });
   }
 
-  findByArticleId(articleId: string): Promise<ArticleTagSchema[]> {
+  findByArticleId(articlesId: string[]): Promise<ArticleTagSchema[]> {
     return this.prismaService.articleTag.findMany({
       where: {
-        articleId,
+        articleId: {
+          in: articlesId,
+        },
       },
     });
   }

@@ -64,4 +64,14 @@ export class UserRoleRepository {
       },
     });
   }
+
+  findManyByUsersId(usersId: string[]): Promise<UserRoleSchema[]> {
+    return this.prismaService.userRole.findMany({
+      where: {
+        userId: {
+          in: usersId,
+        },
+      },
+    });
+  }
 }

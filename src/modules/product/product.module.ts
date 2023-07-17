@@ -6,10 +6,16 @@ import { AccessModule } from '../access/access.module';
 import { UserModule } from '../user/user.module';
 import { UserRoleModule } from '../user-role/user-role.module';
 import { StockModule } from '../stock/stock.module';
+import { ProductLoader } from './product.dataloader';
 
 @Module({
   imports: [AccessModule, UserModule, UserRoleModule, StockModule],
-  providers: [ProductResolver, ProductService, ProductRepository],
-  exports: [ProductService],
+  providers: [
+    ProductResolver,
+    ProductService,
+    ProductRepository,
+    ProductLoader,
+  ],
+  exports: [ProductService, ProductLoader],
 })
 export class ProductModule {}
